@@ -1,0 +1,14 @@
+[toy] actual=[1, 2, 3, 4, 5] pred=[1, 2, 3, 4, 5] AP@5=1.000000 expected=1.000000 OK
+[toy] actual=[1, 2, 3, 4, 5] pred=[9, 1, 9, 2, 9] AP@5=0.200000 expected=0.200000 OK
+[toy] actual=[1, 2, 3, 4, 5] pred=[5, 4, 3, 2, 1] AP@5=1.000000 expected=1.000000 OK
+[toy] actual=[1, 2, 3, 4, 5] pred=[0, 0, 0, 0, 0] AP@5=0.000000 expected=0.000000 OK
+[toy] actual=[1, 2, 3, 4, 5] pred=[1, 1, 1, 1, 1] AP@5=0.200000 expected=0.200000 OK
+[toy] actual=[7] pred=[9, 7, 9, 9, 9] AP@5=0.500000 expected=0.500000 OK
+[target] stdlib cohort 4,254 vs pipeline 4,254; users only in one: 0; identical top-5 sets: 4,254; identical ordered lists: 4254
+[map] popularity: recomputed MAP@5 0.23307 (n=4254) vs dump 0.23307 -> OK
+[map] personal: recomputed MAP@5 0.33552 (n=4254) vs dump 0.33552 -> OK
+[map] formula: recomputed MAP@5 0.33170 (n=4254) vs dump 0.33170 -> OK
+[map] content: recomputed MAP@5 0.28242 (n=4254) vs dump 0.28242 -> OK
+[map] als: recomputed MAP@5 0.29758 (n=4254) vs dump 0.29758 -> OK
+[map] ppr: recomputed MAP@5 0.34310 (n=4254) vs dump 0.34310 -> OK
+[map] rerank: recomputed MAP@5 0.38012 (n=4254) vs dump 0.38012 -> OK

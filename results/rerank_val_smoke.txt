@@ -1,0 +1,13 @@
+[rerank] ppr scores from {'cfg': {'alpha': 0.3, 'half_life': 8}, 'b': 0.25, 'map': 0.3431006111894688}
+[rerank] als scores from {'cfg': {'factors': 32, 'alpha': 1, 'reg': 1.0, 'conf': 'linear', 'iters': 8}, 'b': 0.25, 'map': 0.2975834508697697}
+[rerank] content scores from {'cfg': {'half_life': 8}, 'b': 0.25, 'map': 0.28242203416392414}
+[rerank] candidate pairs 42,360 (141.2 per user); positives 1,031 of 1,500 target slots (candidate recall 0.6873); build 25.6s
+[rerank] ALL features (26): out-of-fold MAP@5 0.34558 (n=300) [131s]
+[rerank] without counts     (23 feats): MAP@5 0.34110  delta -0.00448 [230s]
+[rerank] without quality    (21 feats): MAP@5 0.33507  delta -0.01051 [326s]
+[rerank] without recency    (23 feats): MAP@5 0.33834  delta -0.00723 [431s]
+[rerank] without popularity (24 feats): MAP@5 0.33718  delta -0.00840 [523s]
+[rerank] without schedule   (22 feats): MAP@5 0.33910  delta -0.00648 [548s]
+[rerank] without habits     (23 feats): MAP@5 0.33163  delta -0.01394 [562s]
+[rerank] without user       (24 feats): MAP@5 0.33702  delta -0.00856 [577s]
+[rerank] without methods    (22 feats): MAP@5 0.33519  delta -0.01039 [590s]

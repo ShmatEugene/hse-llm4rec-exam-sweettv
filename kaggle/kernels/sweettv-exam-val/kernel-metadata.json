@@ -1,0 +1,15 @@
+{
+ "id": "shmate/sweettv-exam-val",
+ "title": "sweettv-exam-val",
+ "code_file": "run.py",
+ "language": "python",
+ "kernel_type": "script",
+ "is_private": true,
+ "enable_gpu": false,
+ "enable_internet": false,
+ "competition_sources": [
+  "sweettv-tv-program-recommender"
+ ],
+ "dataset_sources": [],
+ "kernel_sources": []
+}

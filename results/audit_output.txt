@@ -1,0 +1,60 @@
+== view log ==
+rows 5,821,987; distinct users 4,914; distinct vsetv_id 202
+duraton == stop-start: 5,821,870 of 5,821,987; dur<=0: 0
+duraton s p50/p90/p99/p99.9/max: [396, 3911, 14079, 33976, 342145] ; rows >4h: 55,761, >1d: 52
+start range: 2020-03-09 00:00:02 -> 2020-07-26 23:58:42 ; stop max: 2020-07-26 23:59:58
+log rows by ISO week: {11: 407493, 12: 452314, 13: 465318, 14: 428820, 15: 412698, 16: 406317, 17: 417854, 18: 385637, 19: 336042, 20: 232680, 21: 182044, 22: 192998, 23: 162882, 24: 156928, 25: 138807, 26: 126940, 27: 105223, 28: 271172, 29: 261698, 30: 278122}
+exact duplicate log rows (user,ch,start,stop): 17
+log view starts by hour of day: [161360, 77927, 39028, 28454, 29018, 41359, 94423, 163857, 210845, 236550, 230791, 228443, 239283, 242087, 248736, 266154, 282628, 328727, 382824, 452216, 511782, 542318, 471825, 311352]
+
+== schedule ==
+[11-20] rows 1,074,235; labelled 115,613 (0.1076); unlabelled 958,622; distinct labelled ids 5,847; channels 400
+   start 2020-03-08 23:00:00 -> 2020-05-18 11:45:00; ISO weeks 10-21; rows outside nominal weeks: 2,517
+   duration p50/p99/max [1500, 12600, 86400]; dur<=0 1
+   consecutive airings on a channel: 1,073,835; next_start - (start+duration [s]): ==0 0.9996, >0 (hole) 0.0004, <0 (overlap) 0.0000; if duration were minutes: ==0 0.0000
+   duplicate (channel,start) rows: 1
+[21-30] rows 1,074,394; labelled 121,505 (0.1131); unlabelled 952,889; distinct labelled ids 6,363; channels 403
+   start 2020-05-18 00:00:00 -> 2020-07-27 11:55:00; ISO weeks 21-31; rows outside nominal weeks: 2,429
+   duration p50/p99/max [1500, 13200, 86400]; dur<=0 0
+   consecutive airings on a channel: 1,073,991; next_start - (start+duration [s]): ==0 1.0000, >0 (hole) 0.0000, <0 (overlap) 0.0000; if duration were minutes: ==0 0.0000
+   duplicate (channel,start) rows: 0
+[31-42] rows 1,295,378; labelled 144,774 (0.1118); unlabelled 1,150,604; distinct labelled ids 6,636; channels 404
+   start 2020-07-27 00:00:00 -> 2020-10-19 11:55:00; ISO weeks 31-43; rows outside nominal weeks: 2,399
+   duration p50/p99/max [1500, 13500, 43200]; dur<=0 0
+   consecutive airings on a channel: 1,294,974; next_start - (start+duration [s]): ==0 1.0000, >0 (hole) 0.0000, <0 (overlap) 0.0000; if duration were minutes: ==0 0.0000
+   duplicate (channel,start) rows: 0
+
+== cross-file ==
+shared (channel,start) 11-20 & 21-30: 0 ; 21-30 & 31-42: 0
+labelled ids: train(11-30) 8,234; test-file 6,636; test-file ids also in train files 5,199; 21-30 ids also in 11-20 3,976 of 6,363
+
+== H1 channel key ==
+log vsetv_id 202; schedule channel_id 405; intersection 197; log rows whose vsetv_id is a schedule channel: 5,708,408 of 5,821,987
+shift -3 h: share of views starting <120 s after a programme start on its channel: 0.0358
+shift -2 h: share of views starting <120 s after a programme start on its channel: 0.0356
+shift -1 h: share of views starting <120 s after a programme start on its channel: 0.0349
+shift +0 h: share of views starting <120 s after a programme start on its channel: 0.0389
+shift +1 h: share of views starting <120 s after a programme start on its channel: 0.0337
+shift +2 h: share of views starting <120 s after a programme start on its channel: 0.0332
+shift +3 h: share of views starting <120 s after a programme start on its channel: 0.0328
+control (channel id + 1, shift 0): 0.0212
+
+== H8 programme id consistency (labelled rows, all three files) ==
+labelled rows 381,892; ids 9,671; ids with >1 title 4,351; >1 category 0; >1 channel 4,644
+category counts (rows): {'Детям': 149577, 'Сериалы': 105031, 'Фильмы': 78144, 'Развлечения': 21704, 'Инфо': 14475, 'Познавательное': 11371, 'Другое': 1572, 'Спорт': 18}
+  non-empty tv_show_genre_1: 0.9568
+  non-empty tv_show_genre_2: 0.6002
+  non-empty tv_show_genre_3: 0.1903
+  non-empty year_of_production: 0.9909
+  non-empty director: 0.8649
+  non-empty actors: 0.8688
+  example id 10002000: titles {"Т/с 'След'. 'Снимается кино'.": 2, "Т/с 'След'. 'Маски'.": 2, "Т/с 'След'. 'Бедная Маша'.": 2}
+  example id 12001682: titles {"М/с 'Губка Боб Квадратные Штаны'.": 1698, "М/с 'Губка Боб Квадратные Штаны', 183 с. 'Морской ёж / Защита Сквидварда'.": 128, "М/с 'Губка Боб Квадратные Штаны', 201 с. 'Ночной кошмар Сэнди! / Доска объявлений'.": 118}
+  example id 12001712: titles {"М/с 'Симпсоны'.": 193, "М/с 'Симпсоны', 13 сезон, 15 с. 'Во всем виновата Лиза'.": 39, "М/с 'Симпсоны', 15 сезон, 5 с. 'Толстый и пушистый'.": 38}
+
+== H6 test users / submission template ==
+template rows 1,260; distinct 1,260; all rows '0 0 0 0 0': True
+test users present in view log 11-30: 1,260; absent: 0
+log rows of test users 2,173,313; of all log users, share that are test users 0.2564
+test-user log rows by week: {11: 144069, 12: 163515, 13: 168349, 14: 161521, 15: 149497, 16: 148909, 17: 152425, 18: 136411, 19: 124591, 20: 86131, 21: 71038, 22: 75700, 23: 64946, 24: 62138, 25: 57409, 26: 53478, 27: 43226, 28: 101437, 29: 101802, 30: 106721}
+test users by last active week: {13: 4, 14: 2, 15: 1, 16: 3, 17: 3, 19: 1, 21: 1, 25: 1, 26: 4, 27: 1, 28: 6, 29: 17, 30: 1216}

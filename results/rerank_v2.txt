@@ -1,0 +1,11 @@
+[v2] k=30: candidate pairs 664,844 (156.3/user), candidate recall 0.7474 [92s]
+[v2] k=30 clf trees=300: out-of-fold MAP@5 0.38012 (n=4254) [189s]
+[v2] k=30 poisson trees=300: out-of-fold MAP@5 0.37228 (n=4254) [287s]
+[v2] k=60: candidate pairs 804,469 (189.1/user), candidate recall 0.7883 [298s]
+[v2] k=60 clf trees=300: out-of-fold MAP@5 0.38095 (n=4254) [418s]
+[v2] k=60 clf trees=600: out-of-fold MAP@5 0.37962 (n=4254) [634s]
+[v2] k=60 poisson trees=300: out-of-fold MAP@5 0.36886 (n=4254) [754s]
+[v2] selected by validation: k=60 clf trees=300 MAP@5 0.38095
+[v2] selected - round-1 configuration (k=30 clf 300): +0.00083, 95% CI [-0.00111, +0.00270]
+[v2] test: candidates 348.0/user; distinct ids 117; familiar share 0.8906; f_rerank_v2.csv sha256 48d6b044cd5b601bd6669d1747dc12139d22da4d27c87d8566f73a3dfdd9c920
+total 805s

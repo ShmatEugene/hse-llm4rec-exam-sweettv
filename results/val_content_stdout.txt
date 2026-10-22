@@ -1,0 +1,8 @@
+[val:content] cohort n=4254, pool 7045; grid 2 configs x b in [0.0, 0.25, 0.5]
+[val:content] {"half_life": null} b=0.0 MAP@5 0.20695 fit 2.5s
+[val:content] {"half_life": null} b=0.25 MAP@5 0.28206 fit 2.5s
+[val:content] {"half_life": null} b=0.5 MAP@5 0.26125 fit 2.5s
+[val:content] {"half_life": 8} b=0.0 MAP@5 0.20751 fit 2.7s
+[val:content] {"half_life": 8} b=0.25 MAP@5 0.28242 fit 2.7s
+[val:content] {"half_life": 8} b=0.5 MAP@5 0.26041 fit 2.7s
+[val:content] BEST {"half_life": 8} b=0.25 MAP@5 0.28242

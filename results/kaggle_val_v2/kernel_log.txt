@@ -1,0 +1,237 @@
+data dir: /kaggle/input/competitions/sweettv-tv-program-recommender | python 3.13.15
+numpy 2.1.3 pandas 2.3.3 scipy 1.16.3 sklearn 1.6.1
+4
+               total        used        free      shared  buff/cache   available
+Mem:              31           0          26           0           4          30
+
+$ python -c "import sys; sys.path.insert(0, 'src'); from common import *; load_log(); [load_sched(p) for p in SCHED_FILES]; load_meta(); print('cache warm')"
+[cache] log parsed in 15.7s
+[cache] schedule 11-20 parsed in 6.7s
+[cache] schedule 21-30 parsed in 6.9s
+[cache] schedule 31-42 parsed in 8.0s
+cache warm
+[exit 0 after 48s]
+
+$ for m in content formula; do python src/run_val.py $m > results/val_${m}_stdout.txt 2>&1 & done; wait; grep -h BEST results/val_*_stdout.txt
+[val:content] BEST {"half_life": 8} b=0.25 MAP@5 0.28242
+[val:formula] BEST {"half_life": 4, "rating": "hard"} b=0.5 MAP@5 0.33170
+[exit 0 after 217s]
+
+$ python src/run_rerank_val.py
+[rerank] ppr scores from {'cfg': {'alpha': 0.3, 'half_life': 8}, 'b': 0.25, 'map': 0.3431006111894688}
+[rerank] als scores from {'cfg': {'factors': 32, 'alpha': 1, 'reg': 1.0, 'conf': 'linear', 'iters': 8}, 'b': 0.25, 'map': 0.2975834508697697}
+[rerank] content scores from {'cfg': {'half_life': 8}, 'b': 0.25, 'map': 0.28242203416392414}
+[rerank] candidate pairs 664,844 (156.3 per user); positives 15,898 of 21,270 target slots (candidate recall 0.7474); build 64.1s
+[rerank] ALL features (27): out-of-fold MAP@5 0.38012 (n=4254) [167s]
+[rerank] without counts     (24 feats): MAP@5 0.38056  delta +0.00044 [255s]
+[rerank] without quality    (22 feats): MAP@5 0.37765  delta -0.00247 [337s]
+[rerank] without recency    (24 feats): MAP@5 0.37945  delta -0.00067 [422s]
+[rerank] without popularity (25 feats): MAP@5 0.38058  delta +0.00046 [515s]
+[rerank] without schedule   (23 feats): MAP@5 0.38040  delta +0.00028 [606s]
+[rerank] without habits     (23 feats): MAP@5 0.37415  delta -0.00597 [698s]
+[rerank] without user       (25 feats): MAP@5 0.37922  delta -0.00090 [792s]
+[rerank] without methods    (23 feats): MAP@5 0.37938  delta -0.00074 [883s]
+[exit 0 after 885s]
+
+$ python src/final.py
+[val] cohort accounting: {'users': 4254, 'watched>=1': 4146, 'contact_below_0.8_only': 69, 'log_but_no_labelled_contact': 13, 'not_in_history_log': 26}
+[test] cohort accounting: {'users': 1260, 'watched>=1': 1256, 'contact_below_0.8_only': 2, 'log_but_no_labelled_contact': 2, 'not_in_history_log': 0}
+[val] cohort 4,254 users with >= 5 target programmes; 5th/6th-place frequency ties 2,679; pool 7,045; test pool 6,642
+[val] popularity cfg={} b=0.0 MAP@5 0.23307 (n=4254) | val 0.1s, test 0.0s -> f_popularity.csv
+[val] personal   cfg={"half_life": 16} b=0.25 MAP@5 0.33552 (n=4254) | val 0.2s, test 0.1s -> f_personal.csv
+[val] formula    cfg={"half_life": 4, "rating": "hard"} b=0.5 MAP@5 0.33170 (n=4254) | val 2.1s, test 1.4s -> f_formula.csv
+[val] content    cfg={"half_life": 8} b=0.25 MAP@5 0.28242 (n=4254) | val 10.0s, test 8.4s -> f_content.csv
+[val] als        cfg={"factors": 32, "alpha": 1, "reg": 1.0, "conf": "linear", "iters": 8} b=0.25 MAP@5 0.29758 (n=4254) | val 3.9s, test 5.4s -> f_als.csv
+[val] ppr        cfg={"alpha": 0.3, "half_life": 8} b=0.25 MAP@5 0.34310 (n=4254) | val 28.6s, test 12.4s -> f_ppr.csv
+[val] rerank     out-of-fold MAP@5 0.38012 (n=4254); candidates 156.3/user, recall 0.7474; test candidates 323.1/user -> f_rerank.csv [149s]
+[boot] popularity MAP@5 0.23307 95% CI [0.22691, 0.23949]; rerank - popularity: [+0.14068, +0.15305]; users with >= 1 hit 3,214
+[boot] personal   MAP@5 0.33552 95% CI [0.32817, 0.34273]; rerank - personal: [+0.04086, +0.04810]; users with >= 1 hit 3,658
+[boot] formula    MAP@5 0.33170 95% CI [0.32403, 0.33877]; rerank - formula: [+0.04469, +0.05234]; users with >= 1 hit 3,646
+[boot] content    MAP@5 0.28242 95% CI [0.27622, 0.28871]; rerank - content: [+0.09301, +0.10210]; users with >= 1 hit 3,556
+[boot] als        MAP@5 0.29758 95% CI [0.29093, 0.30442]; rerank - als: [+0.07718, +0.08755]; users with >= 1 hit 3,616
+[boot] ppr        MAP@5 0.34310 95% CI [0.33574, 0.35007]; rerank - ppr: [+0.03347, +0.04036]; users with >= 1 hit 3,700
+[boot] rerank     MAP@5 0.38012 95% CI [0.37240, 0.38777]; rerank - rerank: [+0.00000, +0.00000]; users with >= 1 hit 3,810
+[test] popularity distinct ids in 6,300 slots 5; share of slots already watched by that user 0.7257
+[test] personal   distinct ids in 6,300 slots 246; share of slots already watched by that user 0.9883
+[test] formula    distinct ids in 6,300 slots 290; share of slots already watched by that user 0.9883
+[test] content    distinct ids in 6,300 slots 144; share of slots already watched by that user 0.7325
+[test] als        distinct ids in 6,300 slots 76; share of slots already watched by that user 0.8535
+[test] ppr        distinct ids in 6,300 slots 220; share of slots already watched by that user 0.9425
+[test] rerank     distinct ids in 6,300 slots 122; share of slots already watched by that user 0.8929
+== heavy user 13866173795451203812: 2130 watched airings of 482 programmes in weeks 11-18 ==
+  actual weeks 19-30 top-5: 240081 Факты. [Инфо]; 2400480 ТСН. [Инфо]; 2400508 Сегодня. [Инфо]; 12001682 М/с 'Губка Боб Квадратные Штаны'. [Детям]; 20088 'Завтрак с 1+1'. Информационно-развлекат [Развлечения]
+  popularity AP@5 0.5200: *2400480 ТСН. [Инфо]; *240081 Факты. [Инфо]; 2400467 'Викна-Новости'. [Инфо]; 200344 'Чистоnews'. [Развлечения]; *2400508 Сегодня. [Инфо]
+  personal   AP@5 0.7600: *2400480 ТСН. [Инфо]; *12001682 М/с 'Губка Боб Квадратные Штаны' [Детям]; *240081 Факты. [Инфо]; 12002955 М/с 'Свинка Пеппа'. [Детям]; *2400508 Сегодня. [Инфо]
+  formula    AP@5 0.7600: *2400480 ТСН. [Инфо]; *12001682 М/с 'Губка Боб Квадратные Штаны' [Детям]; *240081 Факты. [Инфо]; 12002955 М/с 'Свинка Пеппа'. [Детям]; *2400508 Сегодня. [Инфо]
+  content    AP@5 0.6000: *2400480 ТСН. [Инфо]; *240081 Факты. [Инфо]; *2400508 Сегодня. [Инфо]; 2400467 'Викна-Новости'. [Инфо]; 5900275 'Утро России'. [Инфо]
+  als        AP@5 0.1000: 12002793 М/с 'Фиксики'. [Детям]; *12001682 М/с 'Губка Боб Квадратные Штаны' [Детям]; 12001863 М/с 'Смешарики'. [Детям]; 12002806 М/с 'Октонавты', 1 сезон. [Детям]; 10001514 Т/с 'Теория большого взрыва', 2  [Сериалы]
+  ppr        AP@5 0.7600: *2400480 ТСН. [Инфо]; *12001682 М/с 'Губка Боб Квадратные Штаны' [Детям]; *240081 Факты. [Инфо]; 12002955 М/с 'Свинка Пеппа'. [Детям]; *2400508 Сегодня. [Инфо]
+  rerank     AP@5 0.7600: *2400480 ТСН. [Инфо]; *240081 Факты. [Инфо]; *2400508 Сегодня. [Инфо]; 2400467 'Викна-Новости'. [Инфо]; *20088 'Завтрак с 1+1'. Информационно-р [Развлечения]
+== light user 764273904752697078: 1 watched airings of 1 programmes in weeks 11-18 ==
+  actual weeks 19-30 top-5: 2400508 Сегодня. [Инфо]; 90080535 Х/ф 'Когда возвращается прошлое', 4 с. [Фильмы]; 90080318 Х/ф 'Всё ещё будет'. [Фильмы]; 90081125 Х/ф 'Дом Надежды', 1-3 с. [Фильмы]; 500346 'Право на власть'. [Развлечения]
+  popularity AP@5 0.0400: 2400480 ТСН. [Инфо]; 240081 Факты. [Инфо]; 2400467 'Викна-Новости'. [Инфо]; 200344 'Чистоnews'. [Развлечения]; *2400508 Сегодня. [Инфо]
+  personal   AP@5 0.2000: *500346 'Право на власть'. [Развлечения]; 2400480 ТСН. [Инфо]; 240081 Факты. [Инфо]; 2400467 'Викна-Новости'. [Инфо]; 200344 'Чистоnews'. [Развлечения]
+  formula    AP@5 0.2000: *500346 'Право на власть'. [Развлечения]; 2400480 ТСН. [Инфо]; 240081 Факты. [Инфо]; 2400467 'Викна-Новости'. [Инфо]; 200344 'Чистоnews'. [Развлечения]
+  content    AP@5 0.0000: 500368 Ток-шоу '60 минут' с Ольгой Скаб [Развлечения]; 2400480 ТСН. [Инфо]; 240081 Факты. [Инфо]; 500280 'Пусть говорят'. [Развлечения]; 700156 Пойми меня. [Развлечения]
+  als        AP@5 0.0400: 2400340 Служба розыска детей. [Инфо]; 5900347 'Деньги'. [Инфо]; 200352 'Вечерний квартал'. [Развлечения]; 12001682 М/с 'Губка Боб Квадратные Штаны' [Детям]; *500346 'Право на власть'. [Развлечения]
+  ppr        AP@5 0.2000: *500346 'Право на власть'. [Развлечения]; 2400480 ТСН. [Инфо]; 240081 Факты. [Инфо]; 12001682 М/с 'Губка Боб Квадратные Штаны' [Детям]; 20088 'Завтрак с 1+1'. Информационно-р [Развлечения]
+  rerank     AP@5 0.0400: 2400480 ТСН. [Инфо]; 6700482 Секретные материалы. [Другое]; 2400467 'Викна-Новости'. [Инфо]; 10002514 Т/с 'Кухня'. [Сериалы]; *500346 'Право на власть'. [Развлечения]
+total 339s
+[exit 0 after 341s]
+
+=== results/examples.txt ===
+== heavy user 13866173795451203812: 2130 watched airings of 482 programmes in weeks 11-18 ==
+  actual weeks 19-30 top-5: 240081 Факты. [Инфо]; 2400480 ТСН. [Инфо]; 2400508 Сегодня. [Инфо]; 12001682 М/с 'Губка Боб Квадратные Штаны'. [Детям]; 20088 'Завтрак с 1+1'. Информационно-развлекат [Развлечения]
+  popularity AP@5 0.5200: *2400480 ТСН. [Инфо]; *240081 Факты. [Инфо]; 2400467 'Викна-Новости'. [Инфо]; 200344 'Чистоnews'. [Развлечения]; *2400508 Сегодня. [Инфо]
+  personal   AP@5 0.7600: *2400480 ТСН. [Инфо]; *12001682 М/с 'Губка Боб Квадратные Штаны' [Детям]; *240081 Факты. [Инфо]; 12002955 М/с 'Свинка Пеппа'. [Детям]; *2400508 Сегодня. [Инфо]
+  formula    AP@5 0.7600: *2400480 ТСН. [Инфо]; *12001682 М/с 'Губка Боб Квадратные Штаны' [Детям]; *240081 Факты. [Инфо]; 12002955 М/с 'Свинка Пеппа'. [Детям]; *2400508 Сегодня. [Инфо]
+  content    AP@5 0.6000: *2400480 ТСН. [Инфо]; *240081 Факты. [Инфо]; *2400508 Сегодня. [Инфо]; 2400467 'Викна-Новости'. [Инфо]; 5900275 'Утро России'. [Инфо]
+  als        AP@5 0.1000: 12002793 М/с 'Фиксики'. [Детям]; *12001682 М/с 'Губка Боб Квадратные Штаны' [Детям]; 12001863 М/с 'Смешарики'. [Детям]; 12002806 М/с 'Октонавты', 1 сезон. [Детям]; 10001514 Т/с 'Теория большого взрыва', 2  [Сериалы]
+  ppr        AP@5 0.7600: *2400480 ТСН. [Инфо]; *12001682 М/с 'Губка Боб Квадратные Штаны' [Детям]; *240081 Факты. [Инфо]; 12002955 М/с 'Свинка Пеппа'. [Детям]; *2400508 Сегодня. [Инфо]
+  rerank     AP@5 0.7600: *2400480 ТСН. [Инфо]; *240081 Факты. [Инфо]; *2400508 Сегодня. [Инфо]; 2400467 'Викна-Новости'. [Инфо]; *20088 'Завтрак с 1+1'. Информационно-р [Развлечения]
+== light user 764273904752697078: 1 watched airings of 1 programmes in weeks 11-18 ==
+  actual weeks 19-30 top-5: 2400508 Сегодня. [Инфо]; 90080535 Х/ф 'Когда возвращается прошлое', 4 с. [Фильмы]; 90080318 Х/ф 'Всё ещё будет'. [Фильмы]; 90081125 Х/ф 'Дом Надежды', 1-3 с. [Фильмы]; 500346 'Право на власть'. [Развлечения]
+  popularity AP@5 0.0400: 2400480 ТСН. [Инфо]; 240081 Факты. [Инфо]; 2400467 'Викна-Новости'. [Инфо]; 200344 'Чистоnews'. [Развлечения]; *2400508 Сегодня. [Инфо]
+  personal   AP@5 0.2000: *500346 'Право на власть'. [Развлечения]; 2400480 ТСН. [Инфо]; 240081 Факты. [Инфо]; 2400467 'Викна-Новости'. [Инфо]; 200344 'Чистоnews'. [Развлечения]
+  formula    AP@5 0.2000: *500346 'Право на власть'. [Развлечения]; 2400480 ТСН. [Инфо]; 240081 Факты. [Инфо]; 2400467 'Викна-Новости'. [Инфо]; 200344 'Чистоnews'. [Развлечения]
+  content    AP@5 0.0000: 500368 Ток-шоу '60 минут' с Ольгой Скаб [Развлечения]; 2400480 ТСН. [Инфо]; 240081 Факты. [Инфо]; 500280 'Пусть говорят'. [Развлечения]; 700156 Пойми меня. [Развлечения]
+  als        AP@5 0.0400: 2400340 Служба розыска детей. [Инфо]; 5900347 'Деньги'. [Инфо]; 200352 'Вечерний квартал'. [Развлечения]; 12001682 М/с 'Губка Боб Квадратные Штаны' [Детям]; *500346 'Право на власть'. [Развлечения]
+  ppr        AP@5 0.2000: *500346 'Право на власть'. [Развлечения]; 2400480 ТСН. [Инфо]; 240081 Факты. [Инфо]; 12001682 М/с 'Губка Боб Квадратные Штаны' [Детям]; 20088 'Завтрак с 1+1'. Информационно-р [Развлечения]
+  rerank     AP@5 0.0400: 2400480 ТСН. [Инфо]; 6700482 Секретные материалы. [Другое]; 2400467 'Викна-Новости'. [Инфо]; 10002514 Т/с 'Кухня'. [Сериалы]; *500346 'Право на власть'. [Развлечения]
+
+
+=== results/final_output.txt ===
+[val] cohort accounting: {'users': 4254, 'watched>=1': 4146, 'contact_below_0.8_only': 69, 'log_but_no_labelled_contact': 13, 'not_in_history_log': 26}
+[test] cohort accounting: {'users': 1260, 'watched>=1': 1256, 'contact_below_0.8_only': 2, 'log_but_no_labelled_contact': 2, 'not_in_history_log': 0}
+[val] cohort 4,254 users with >= 5 target programmes; 5th/6th-place frequency ties 2,679; pool 7,045; test pool 6,642
+[val] popularity cfg={} b=0.0 MAP@5 0.23307 (n=4254) | val 0.1s, test 0.0s -> f_popularity.csv
+[val] personal   cfg={"half_life": 16} b=0.25 MAP@5 0.33552 (n=4254) | val 0.2s, test 0.1s -> f_personal.csv
+[val] formula    cfg={"half_life": 4, "rating": "hard"} b=0.5 MAP@5 0.33170 (n=4254) | val 2.1s, test 1.4s -> f_formula.csv
+[val] content    cfg={"half_life": 8} b=0.25 MAP@5 0.28242 (n=4254) | val 10.0s, test 8.4s -> f_content.csv
+[val] als        cfg={"factors": 32, "alpha": 1, "reg": 1.0, "conf": "linear", "iters": 8} b=0.25 MAP@5 0.29758 (n=4254) | val 3.9s, test 5.4s -> f_als.csv
+[val] ppr        cfg={"alpha": 0.3, "half_life": 8} b=0.25 MAP@5 0.34310 (n=4254) | val 28.6s, test 12.4s -> f_ppr.csv
+[val] rerank     out-of-fold MAP@5 0.38012 (n=4254); candidates 156.3/user, recall 0.7474; test candidates 323.1/user -> f_rerank.csv [149s]
+[boot] popularity MAP@5 0.23307 95% CI [0.22691, 0.23949]; rerank - popularity: [+0.14068, +0.15305]; users with >= 1 hit 3,214
+[boot] personal   MAP@5 0.33552 95% CI [0.32817, 0.34273]; rerank - personal: [+0.04086, +0.04810]; users with >= 1 hit 3,658
+[boot] formula    MAP@5 0.33170 95% CI [0.32403, 0.33877]; rerank - formula: [+0.04469, +0.05234]; users with >= 1 hit 3,646
+[boot] content    MAP@5 0.28242 95% CI [0.27622, 0.28871]; rerank - content: [+0.09301, +0.10210]; users with >= 1 hit 3,556
+[boot] als        MAP@5 0.29758 95% CI [0.29093, 0.30442]; rerank - als: [+0.07718, +0.08755]; users with >= 1 hit 3,616
+[boot] ppr        MAP@5 0.34310 95% CI [0.33574, 0.35007]; rerank - ppr: [+0.03347, +0.04036]; users with >= 1 hit 3,700
+[boot] rerank     MAP@5 0.38012 95% CI [0.37240, 0.38777]; rerank - rerank: [+0.00000, +0.00000]; users with >= 1 hit 3,810
+[test] popularity distinct ids in 6,300 slots 5; share of slots already watched by that user 0.7257
+[test] personal   distinct ids in 6,300 slots 246; share of slots already watched by that user 0.9883
+[test] formula    distinct ids in 6,300 slots 290; share of slots already watched by that user 0.9883
+[test] content    distinct ids in 6,300 slots 144; share of slots already watched by that user 0.7325
+[test] als        distinct ids in 6,300 slots 76; share of slots already watched by that user 0.8535
+[test] ppr        distinct ids in 6,300 slots 220; share of slots already watched by that user 0.9425
+[test] rerank     distinct ids in 6,300 slots 122; share of slots already watched by that user 0.8929
+== heavy user 13866173795451203812: 2130 watched airings of 482 programmes in weeks 11-18 ==
+  actual weeks 19-30 top-5: 240081 Факты. [Инфо]; 2400480 ТСН. [Инфо]; 2400508 Сегодня. [Инфо]; 12001682 М/с 'Губка Боб Квадратные Штаны'. [Детям]; 20088 'Завтрак с 1+1'. Информационно-развлекат [Развлечения]
+  popularity AP@5 0.5200: *2400480 ТСН. [Инфо]; *240081 Факты. [Инфо]; 2400467 'Викна-Новости'. [Инфо]; 200344 'Чистоnews'. [Развлечения]; *2400508 Сегодня. [Инфо]
+  personal   AP@5 0.7600: *2400480 ТСН. [Инфо]; *12001682 М/с 'Губка Боб Квадратные Штаны' [Детям]; *240081 Факты. [Инфо]; 12002955 М/с 'Свинка Пеппа'. [Детям]; *2400508 Сегодня. [Инфо]
+  formula    AP@5 0.7600: *2400480 ТСН. [Инфо]; *12001682 М/с 'Губка Боб Квадратные Штаны' [Детям]; *240081 Факты. [Инфо]; 12002955 М/с 'Свинка Пеппа'. [Детям]; *2400508 Сегодня. [Инфо]
+  content    AP@5 0.6000: *2400480 ТСН. [Инфо]; *240081 Факты. [Инфо]; *2400508 Сегодня. [Инфо]; 2400467 'Викна-Новости'. [Инфо]; 5900275 'Утро России'. [Инфо]
+  als        AP@5 0.1000: 12002793 М/с 'Фиксики'. [Детям]; *12001682 М/с 'Губка Боб Квадратные Штаны' [Детям]; 12001863 М/с 'Смешарики'. [Детям]; 12002806 М/с 'Октонавты', 1 сезон. [Детям]; 10001514 Т/с 'Теория большого взрыва', 2  [Сериалы]
+  ppr        AP@5 0.7600: *2400480 ТСН. [Инфо]; *12001682 М/с 'Губка Боб Квадратные Штаны' [Детям]; *240081 Факты. [Инфо]; 12002955 М/с 'Свинка Пеппа'. [Детям]; *2400508 Сегодня. [Инфо]
+  rerank     AP@5 0.7600: *2400480 ТСН. [Инфо]; *240081 Факты. [Инфо]; *2400508 Сегодня. [Инфо]; 2400467 'Викна-Новости'. [Инфо]; *20088 'Завтрак с 1+1'. Информационно-р [Развлечения]
+== light user 764273904752697078: 1 watched airings of 1 programmes in weeks 11-18 ==
+  actual weeks 19-30 top-5: 2400508 Сегодня. [Инфо]; 90080535 Х/ф 'Когда возвращается прошлое', 4 с. [Фильмы]; 90080318 Х/ф 'Всё ещё будет'. [Фильмы]; 90081125 Х/ф 'Дом Надежды', 1-3 с. [Фильмы]; 500346 'Право на власть'. [Развлечения]
+  popularity AP@5 0.0400: 2400480 ТСН. [Инфо]; 240081 Факты. [Инфо]; 2400467 'Викна-Новости'. [Инфо]; 200344 'Чистоnews'. [Развлечения]; *2400508 Сегодня. [Инфо]
+  personal   AP@5 0.2000: *500346 'Право на власть'. [Развлечения]; 2400480 ТСН. [Инфо]; 240081 Факты. [Инфо]; 2400467 'Викна-Новости'. [Инфо]; 200344 'Чистоnews'. [Развлечения]
+  formula    AP@5 0.2000: *500346 'Право на власть'. [Развлечения]; 2400480 ТСН. [Инфо]; 240081 Факты. [Инфо]; 2400467 'Викна-Новости'. [Инфо]; 200344 'Чистоnews'. [Развлечения]
+  content    AP@5 0.0000: 500368 Ток-шоу '60 минут' с Ольгой Скаб [Развлечения]; 2400480 ТСН. [Инфо]; 240081 Факты. [Инфо]; 500280 'Пусть говорят'. [Развлечения]; 700156 Пойми меня. [Развлечения]
+  als        AP@5 0.0400: 2400340 Служба розыска детей. [Инфо]; 5900347 'Деньги'. [Инфо]; 200352 'Вечерний квартал'. [Развлечения]; 12001682 М/с 'Губка Боб Квадратные Штаны' [Детям]; *500346 'Право на власть'. [Развлечения]
+  ppr        AP@5 0.2000: *500346 'Право на власть'. [Развлечения]; 2400480 ТСН. [Инфо]; 240081 Факты. [Инфо]; 12001682 М/с 'Губка Боб Квадратные Штаны' [Детям]; 20088 'Завтрак с 1+1'. Информационно-р [Развлечения]
+  rerank     AP@5 0.0400: 2400480 ТСН. [Инфо]; 6700482 Секретные материалы. [Другое]; 2400467 'Викна-Новости'. [Инфо]; 10002514 Т/с 'Кухня'. [Сериалы]; *500346 'Право на власть'. [Развлечения]
+total 339s
+
+
+=== results/rerank_val.txt ===
+[rerank] ppr scores from {'cfg': {'alpha': 0.3, 'half_life': 8}, 'b': 0.25, 'map': 0.3431006111894688}
+[rerank] als scores from {'cfg': {'factors': 32, 'alpha': 1, 'reg': 1.0, 'conf': 'linear', 'iters': 8}, 'b': 0.25, 'map': 0.2975834508697697}
+[rerank] content scores from {'cfg': {'half_life': 8}, 'b': 0.25, 'map': 0.28242203416392414}
+[rerank] candidate pairs 664,844 (156.3 per user); positives 15,898 of 21,270 target slots (candidate recall 0.7474); build 64.1s
+[rerank] ALL features (27): out-of-fold MAP@5 0.38012 (n=4254) [167s]
+[rerank] without counts     (24 feats): MAP@5 0.38056  delta +0.00044 [255s]
+[rerank] without quality    (22 feats): MAP@5 0.37765  delta -0.00247 [337s]
+[rerank] without recency    (24 feats): MAP@5 0.37945  delta -0.00067 [422s]
+[rerank] without popularity (25 feats): MAP@5 0.38058  delta +0.00046 [515s]
+[rerank] without schedule   (23 feats): MAP@5 0.38040  delta +0.00028 [606s]
+[rerank] without habits     (23 feats): MAP@5 0.37415  delta -0.00597 [698s]
+[rerank] without user       (25 feats): MAP@5 0.37922  delta -0.00090 [792s]
+[rerank] without methods    (23 feats): MAP@5 0.37938  delta -0.00074 [883s]
+
+
+=== results/val_content.txt ===
+[val:content] cohort n=4254, pool 7045; grid 2 configs x b in [0.0, 0.25, 0.5]
+[val:content] {"half_life": null} b=0.0 MAP@5 0.20695 fit 2.5s
+[val:content] {"half_life": null} b=0.25 MAP@5 0.28206 fit 2.5s
+[val:content] {"half_life": null} b=0.5 MAP@5 0.26125 fit 2.5s
+[val:content] {"half_life": 8} b=0.0 MAP@5 0.20751 fit 2.7s
+[val:content] {"half_life": 8} b=0.25 MAP@5 0.28242 fit 2.7s
+[val:content] {"half_life": 8} b=0.5 MAP@5 0.26041 fit 2.7s
+[val:content] BEST {"half_life": 8} b=0.25 MAP@5 0.28242
+
+
+=== results/val_content_stdout.txt ===
+[val:content] cohort n=4254, pool 7045; grid 2 configs x b in [0.0, 0.25, 0.5]
+[val:content] {"half_life": null} b=0.0 MAP@5 0.20695 fit 2.5s
+[val:content] {"half_life": null} b=0.25 MAP@5 0.28206 fit 2.5s
+[val:content] {"half_life": null} b=0.5 MAP@5 0.26125 fit 2.5s
+[val:content] {"half_life": 8} b=0.0 MAP@5 0.20751 fit 2.7s
+[val:content] {"half_life": 8} b=0.25 MAP@5 0.28242 fit 2.7s
+[val:content] {"half_life": 8} b=0.5 MAP@5 0.26041 fit 2.7s
+[val:content] BEST {"half_life": 8} b=0.25 MAP@5 0.28242
+
+
+=== results/val_formula.txt ===
+[val:formula] cohort n=4254, pool 7045; grid 6 configs x b in [0.0, 0.25, 0.5]
+[val:formula] {"half_life": null, "rating": "soft"} b=0.0 MAP@5 0.31337 fit 1.7s
+[val:formula] {"half_life": null, "rating": "soft"} b=0.25 MAP@5 0.32985 fit 1.7s
+[val:formula] {"half_life": null, "rating": "soft"} b=0.5 MAP@5 0.32974 fit 1.7s
+[val:formula] {"half_life": null, "rating": "hard"} b=0.0 MAP@5 0.31201 fit 1.8s
+[val:formula] {"half_life": null, "rating": "hard"} b=0.25 MAP@5 0.33010 fit 1.8s
+[val:formula] {"half_life": null, "rating": "hard"} b=0.5 MAP@5 0.33098 fit 1.8s
+[val:formula] {"half_life": 4, "rating": "soft"} b=0.0 MAP@5 0.31323 fit 2.2s
+[val:formula] {"half_life": 4, "rating": "soft"} b=0.25 MAP@5 0.32885 fit 2.2s
+[val:formula] {"half_life": 4, "rating": "soft"} b=0.5 MAP@5 0.33032 fit 2.2s
+[val:formula] {"half_life": 4, "rating": "hard"} b=0.0 MAP@5 0.31343 fit 2.1s
+[val:formula] {"half_life": 4, "rating": "hard"} b=0.25 MAP@5 0.32895 fit 2.1s
+[val:formula] {"half_life": 4, "rating": "hard"} b=0.5 MAP@5 0.33170 fit 2.1s
+[val:formula] {"half_life": 8, "rating": "soft"} b=0.0 MAP@5 0.31340 fit 2.1s
+[val:formula] {"half_life": 8, "rating": "soft"} b=0.25 MAP@5 0.32950 fit 2.1s
+[val:formula] {"half_life": 8, "rating": "soft"} b=0.5 MAP@5 0.32982 fit 2.1s
+[val:formula] {"half_life": 8, "rating": "hard"} b=0.0 MAP@5 0.31271 fit 2.0s
+[val:formula] {"half_life": 8, "rating": "hard"} b=0.25 MAP@5 0.32990 fit 2.0s
+[val:formula] {"half_life": 8, "rating": "hard"} b=0.5 MAP@5 0.33107 fit 2.0s
+[val:formula] BEST {"half_life": 4, "rating": "hard"} b=0.5 MAP@5 0.33170
+
+
+=== results/val_formula_stdout.txt ===
+[val:formula] cohort n=4254, pool 7045; grid 6 configs x b in [0.0, 0.25, 0.5]
+[val:formula] {"half_life": null, "rating": "soft"} b=0.0 MAP@5 0.31337 fit 1.7s
+[val:formula] {"half_life": null, "rating": "soft"} b=0.25 MAP@5 0.32985 fit 1.7s
+[val:formula] {"half_life": null, "rating": "soft"} b=0.5 MAP@5 0.32974 fit 1.7s
+[val:formula] {"half_life": null, "rating": "hard"} b=0.0 MAP@5 0.31201 fit 1.8s
+[val:formula] {"half_life": null, "rating": "hard"} b=0.25 MAP@5 0.33010 fit 1.8s
+[val:formula] {"half_life": null, "rating": "hard"} b=0.5 MAP@5 0.33098 fit 1.8s
+[val:formula] {"half_life": 4, "rating": "soft"} b=0.0 MAP@5 0.31323 fit 2.2s
+[val:formula] {"half_life": 4, "rating": "soft"} b=0.25 MAP@5 0.32885 fit 2.2s
+[val:formula] {"half_life": 4, "rating": "soft"} b=0.5 MAP@5 0.33032 fit 2.2s
+[val:formula] {"half_life": 4, "rating": "hard"} b=0.0 MAP@5 0.31343 fit 2.1s
+[val:formula] {"half_life": 4, "rating": "hard"} b=0.25 MAP@5 0.32895 fit 2.1s
+[val:formula] {"half_life": 4, "rating": "hard"} b=0.5 MAP@5 0.33170 fit 2.1s
+[val:formula] {"half_life": 8, "rating": "soft"} b=0.0 MAP@5 0.31340 fit 2.1s
+[val:formula] {"half_life": 8, "rating": "soft"} b=0.25 MAP@5 0.32950 fit 2.1s
+[val:formula] {"half_life": 8, "rating": "soft"} b=0.5 MAP@5 0.32982 fit 2.1s
+[val:formula] {"half_life": 8, "rating": "hard"} b=0.0 MAP@5 0.31271 fit 2.0s
+[val:formula] {"half_life": 8, "rating": "hard"} b=0.25 MAP@5 0.32990 fit 2.0s
+[val:formula] {"half_life": 8, "rating": "hard"} b=0.5 MAP@5 0.33107 fit 2.0s
+[val:formula] BEST {"half_life": 4, "rating": "hard"} b=0.5 MAP@5 0.33170
+
+/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+  cells[i][c] = re.sub('\\\\\|', '|', cell)
+/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+  text = re.sub(r'_', '\_', text) # Escape underscores in display text
+[NbConvertApp] Converting notebook __script__.ipynb to html
+[NbConvertApp] Writing 471032 bytes to __results__.html

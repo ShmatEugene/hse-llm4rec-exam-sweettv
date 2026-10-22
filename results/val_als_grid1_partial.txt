@@ -1,0 +1,10 @@
+[val:als] cohort n=4254, pool 7045; grid 12 configs x b in [0.0, 0.25, 0.5]
+[val:als] {"factors": 32, "alpha": 10, "reg": 1.0, "conf": "linear", "iters": 10} b=0.0 MAP@5 0.18174 fit 262.9s
+[val:als] {"factors": 32, "alpha": 10, "reg": 1.0, "conf": "linear", "iters": 10} b=0.25 MAP@5 0.25871 fit 262.9s
+[val:als] {"factors": 32, "alpha": 10, "reg": 1.0, "conf": "linear", "iters": 10} b=0.5 MAP@5 0.22532 fit 262.9s
+[val:als] {"factors": 32, "alpha": 40, "reg": 1.0, "conf": "linear", "iters": 10} b=0.0 MAP@5 0.11801 fit 78.9s
+[val:als] {"factors": 32, "alpha": 40, "reg": 1.0, "conf": "linear", "iters": 10} b=0.25 MAP@5 0.17990 fit 78.9s
+[val:als] {"factors": 32, "alpha": 40, "reg": 1.0, "conf": "linear", "iters": 10} b=0.5 MAP@5 0.15896 fit 78.9s
+[val:als] {"factors": 32, "alpha": 100, "reg": 1.0, "conf": "linear", "iters": 10} b=0.0 MAP@5 0.09187 fit 271.9s
+[val:als] {"factors": 32, "alpha": 100, "reg": 1.0, "conf": "linear", "iters": 10} b=0.25 MAP@5 0.11090 fit 271.9s
+[val:als] {"factors": 32, "alpha": 100, "reg": 1.0, "conf": "linear", "iters": 10} b=0.5 MAP@5 0.09749 fit 271.9s

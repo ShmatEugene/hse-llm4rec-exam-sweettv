@@ -1,0 +1,4 @@
+User 70601421848869461 (validation cohort; history = weeks 11-18, target = weeks 19-30)
+(a) view-log row: channel 3, start 2020-03-23 16:35:30, stop 2020-03-23 17:15:50; airing of programme 2400480 on channel 3: start 2020-03-23 16:45:00, duration 1500 s. Compute overlap seconds = min(stops) - max(starts), screen time = overlap / duration, and whether it is >= 0.8.
+(b) programme 2400480: the user's watched airings in history have ages (weeks before Monday of week 19) [5.9003, 5.5, 0.6667]; half-life 16 weeks; airings of 2400480 in weeks 19-30: 1434. Compute score = (sum of 0.5^(age/16)) x airings^0.25.
+(c) printed Top-5 (in order): [2400480, 2400467, 2400508, 200337, 5900347]; actual weeks 19-30 top-5 set: [240081, 400357, 2400467, 2400480, 10002514]. Compute AP@5 = (sum of precision@k at each hit position k) / 5.

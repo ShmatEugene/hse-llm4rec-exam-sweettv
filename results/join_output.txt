@@ -1,0 +1,17 @@
+schedule airings 3,444,007; labelled 381,892; ends non-decreasing within channel: True
+log rows: 5,821,987
+log rows used (before clip boundary): 5,821,987
+log rows on a schedule channel: 5,708,408
+log rows overlapping >=1 airing: 5,408,598
+(view, airing) candidate pairs: 7,752,433
+(view, airing) pairs with overlap > 0: 7,752,433
+  of which on a labelled airing (tv_show_id != 0): 3,847,696
+  of which on an unlabelled airing (tv_show_id = 0): 3,904,737
+log rows touching >=1 labelled airing: 2,964,346
+(user, labelled airing) pairs: 3,014,129
+(user, labelled airing) pairs with screen time >= 0.8: 615,979
+  of which screen time > 1 (overlapping views of one user): 24,006
+distinct (user, programme) pairs with >=1 watched airing: 230,113; users with >=1: 4,841 of 4,914; programmes: 3,867
+screen-time histogram (deciles, capped at 1): [1154233, 366313, 232698, 176049, 144923, 122037, 105907, 96329, 89411, 526229]
+watched seconds per (user, labelled airing) p50/p90: [713, 4210] ; airing duration of labelled airings p10/p50/p90 s: [600, 2700, 7200]
+join time 5.6s

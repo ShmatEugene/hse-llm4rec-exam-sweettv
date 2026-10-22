@@ -1,0 +1,35 @@
+200 application/pdf 169137 http://yifanhu.net/PUB/cf.pdf
+000  0 http://infolab.stanford.edu/~glenj/spws.pdf
+200 text/html; charset=utf-8 277594 https://github.com/benhamner/Metrics
+200 text/plain; charset=utf-8 1654 https://raw.githubusercontent.com/benhamner/Metrics/master/Python/ml_metrics/average_precision.py
+200 text/html; charset=utf-8 5894 https://www.kaggle.com/competitions/sweettv-tv-program-recommender
+000  0 http://infolab.stanford.edu/pub/papers/google.pdf
+--- crossref HKV
+10.1109/icdm.2008.22 ['Collaborative Filtering for Implicit Feedback Datasets'] ['Hu', 'Koren', 'Volinsky'] ['2008 Eighth IEEE International Conference on Data Mining'] 263-272 [[2008, 12]]
+10.14711/thesis-b1106722 ['Stacking collaborative filtering for implicit feedback'] ['Huang'] None None None
+--- crossref Jeh-Widom
+10.1145/775152.775191 ['Scaling personalized web search'] ['Jeh', 'Widom'] ["Proceedings of the twelfth international conference on World Wide Web  - WWW '03"] 271 [[2003]]
+--- HKV PDF text (https://yifanhu.net/PUB/cf.pdf, 301 from http):
+Collaborative Filtering for Implicit Feedback Datasets
+that the user indeed likes the item. Consequently, we introduce a set of variables, cui , which measure our confidence
+in observing pui . A plausible choice for cui would be:
+cui = 1 + αrui
+This way, we have some minimal confidence in pui for every user-item pair, but as we observe more evidence for positive preference, our confidence in pui = 1 increases accordingly. The rate of increase is controlled by the constant
+α. In our experiments, setting α = 40 was found to produce
+good results.
+One alternative method that also worked well to us is setting
+cui = 1 + α log(1 + rui /ǫ).
+
+--- benhamner apk: divides by min(len(actual), k); skips duplicates (p not in predicted[:i])
+citation_title=Scikit-learn: Machine Learning in Python
+citation_journal_title=Journal of Machine Learning Research
+citation_volume=12
+citation_issue=85
+citation_firstpage=2825
+citation_lastpage=2830
+citation_pdf_url=http://jmlr.org/papers/volume12/pedregosa11a/pedregosa11a.pdf
+citation_publication_date=2011
+citation_public_url=http://jmlr.org/papers/v12/pedregosa11a.html
+citation_abstract_html_url=http://jmlr.org/papers/v12/pedregosa11a.html
+citation_issn=1533-7928
+sklearn authors: Fabian Pedregosa;Gaël Varoquaux;Alexandre Gramfort;Vincent Michel;Bertrand Thirion;Olivier Grisel;Mathieu Blondel;Peter Prettenhofer;Ron Weiss;Vincent Dubourg;Jake Vanderplas;Alexandre Passos;David Cournapeau;Matthieu Brucher;Matthieu Perrot;Édouard Duchesnay;

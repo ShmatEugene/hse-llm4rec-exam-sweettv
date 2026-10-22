@@ -1,0 +1,26 @@
+[val:ppr] cohort n=4254, pool 7045; grid 8 configs x b in [0.0, 0.25, 0.5]
+[val:ppr] {"alpha": 0.3, "half_life": null} b=0.0 MAP@5 0.33566 fit 29.7s iters=12 resid=5.98e-10
+[val:ppr] {"alpha": 0.3, "half_life": null} b=0.25 MAP@5 0.34243 fit 29.7s iters=12 resid=5.98e-10
+[val:ppr] {"alpha": 0.3, "half_life": null} b=0.5 MAP@5 0.32840 fit 29.7s iters=12 resid=5.98e-10
+[val:ppr] {"alpha": 0.3, "half_life": 8} b=0.0 MAP@5 0.33385 fit 38.9s iters=12 resid=6.33e-10
+[val:ppr] {"alpha": 0.3, "half_life": 8} b=0.25 MAP@5 0.34310 fit 38.9s iters=12 resid=6.33e-10
+[val:ppr] {"alpha": 0.3, "half_life": 8} b=0.5 MAP@5 0.32911 fit 38.9s iters=12 resid=6.33e-10
+[val:ppr] {"alpha": 0.5, "half_life": null} b=0.0 MAP@5 0.34019 fit 29.1s iters=17 resid=5.61e-10
+[val:ppr] {"alpha": 0.5, "half_life": null} b=0.25 MAP@5 0.33185 fit 29.1s iters=17 resid=5.61e-10
+[val:ppr] {"alpha": 0.5, "half_life": null} b=0.5 MAP@5 0.31415 fit 29.1s iters=17 resid=5.61e-10
+[val:ppr] {"alpha": 0.5, "half_life": 8} b=0.0 MAP@5 0.33903 fit 33.8s iters=17 resid=8.05e-10
+[val:ppr] {"alpha": 0.5, "half_life": 8} b=0.25 MAP@5 0.33378 fit 33.8s iters=17 resid=8.05e-10
+[val:ppr] {"alpha": 0.5, "half_life": 8} b=0.5 MAP@5 0.31479 fit 33.8s iters=17 resid=8.05e-10
+[val:ppr] {"alpha": 0.7, "half_life": null} b=0.0 MAP@5 0.32661 fit 42.9s iters=24 resid=5.03e-10
+[val:ppr] {"alpha": 0.7, "half_life": null} b=0.25 MAP@5 0.31219 fit 42.9s iters=24 resid=5.03e-10
+[val:ppr] {"alpha": 0.7, "half_life": null} b=0.5 MAP@5 0.28941 fit 42.9s iters=24 resid=5.03e-10
+[val:ppr] {"alpha": 0.7, "half_life": 8} b=0.0 MAP@5 0.32650 fit 50.5s iters=24 resid=8.58e-10
+[val:ppr] {"alpha": 0.7, "half_life": 8} b=0.25 MAP@5 0.31240 fit 50.5s iters=24 resid=8.58e-10
+[val:ppr] {"alpha": 0.7, "half_life": 8} b=0.5 MAP@5 0.28975 fit 50.5s iters=24 resid=8.58e-10
+[val:ppr] {"alpha": 0.85, "half_life": null} b=0.0 MAP@5 0.29821 fit 78.6s iters=30 resid=3.98e-09
+[val:ppr] {"alpha": 0.85, "half_life": null} b=0.25 MAP@5 0.28448 fit 78.6s iters=30 resid=3.98e-09
+[val:ppr] {"alpha": 0.85, "half_life": null} b=0.5 MAP@5 0.25240 fit 78.6s iters=30 resid=3.98e-09
+[val:ppr] {"alpha": 0.85, "half_life": 8} b=0.0 MAP@5 0.29952 fit 67.7s iters=30 resid=2.33e-09
+[val:ppr] {"alpha": 0.85, "half_life": 8} b=0.25 MAP@5 0.28488 fit 67.7s iters=30 resid=2.33e-09
+[val:ppr] {"alpha": 0.85, "half_life": 8} b=0.5 MAP@5 0.24997 fit 67.7s iters=30 resid=2.33e-09
+[val:ppr] BEST {"alpha": 0.3, "half_life": 8} b=0.25 MAP@5 0.34310

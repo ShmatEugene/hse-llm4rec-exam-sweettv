@@ -1,0 +1,397 @@
+{
+ "val": {
+  "popularity": {
+   "cfg": {},
+   "b": 0.0,
+   "map": 0.23306926813979,
+   "n": 4254,
+   "score_seconds": 0.1,
+   "ci95": [
+    0.2269095557122708,
+    0.23948742360131645
+   ],
+   "rerank_minus_this_ci95": [
+    0.14067902758188375,
+    0.1530519511048425
+   ],
+   "users_with_hit": 3214
+  },
+  "personal": {
+   "cfg": {
+    "half_life": 16
+   },
+   "b": 0.25,
+   "map": 0.3355234289296348,
+   "n": 4254,
+   "score_seconds": 0.2,
+   "ci95": [
+    0.32817199498511207,
+    0.34272598338818366
+   ],
+   "rerank_minus_this_ci95": [
+    0.04086365773389751,
+    0.04810170819620749
+   ],
+   "users_with_hit": 3658
+  },
+  "formula": {
+   "cfg": {
+    "half_life": 4,
+    "rating": "hard"
+   },
+   "b": 0.5,
+   "map": 0.3316964425638615,
+   "n": 4254,
+   "score_seconds": 2.1,
+   "ci95": [
+    0.324027444757875,
+    0.33877137204199964
+   ],
+   "rerank_minus_this_ci95": [
+    0.04469324949067544,
+    0.05234383325497571
+   ],
+   "users_with_hit": 3646
+  },
+  "content": {
+   "cfg": {
+    "half_life": 8
+   },
+   "b": 0.25,
+   "map": 0.28242203416392414,
+   "n": 4254,
+   "score_seconds": 10.0,
+   "ci95": [
+    0.27622279031499763,
+    0.2887117418899859
+   ],
+   "rerank_minus_this_ci95": [
+    0.09300765945776523,
+    0.10209818210311863
+   ],
+   "users_with_hit": 3556
+  },
+  "als": {
+   "cfg": {
+    "factors": 32,
+    "alpha": 1,
+    "reg": 1.0,
+    "conf": "linear",
+    "iters": 8
+   },
+   "b": 0.25,
+   "map": 0.2975834508697697,
+   "n": 4254,
+   "score_seconds": 3.9,
+   "ci95": [
+    0.2909338857545839,
+    0.3044234446011597
+   ],
+   "rerank_minus_this_ci95": [
+    0.07718249490675443,
+    0.08755436060178656
+   ],
+   "users_with_hit": 3616
+  },
+  "ppr": {
+   "cfg": {
+    "alpha": 0.3,
+    "half_life": 8
+   },
+   "b": 0.25,
+   "map": 0.3431006111894688,
+   "n": 4254,
+   "score_seconds": 28.6,
+   "ci95": [
+    0.3357449655226454,
+    0.35007422425952045
+   ],
+   "rerank_minus_this_ci95": [
+    0.03346730528130387,
+    0.04036066055477198
+   ],
+   "users_with_hit": 3700
+  },
+  "rerank": {
+   "cfg": {
+    "model": "HistGradientBoostingClassifier",
+    "max_iter": 300,
+    "learning_rate": 0.05,
+    "max_leaf_nodes": 31,
+    "min_samples_leaf": 50,
+    "l2_regularization": 1.0,
+    "seed": 42,
+    "features": [
+     "c80_pw",
+     "rate80",
+     "exp80",
+     "cpart_pw",
+     "cany_pw",
+     "sst_pw",
+     "c100_pw",
+     "sec_pw",
+     "c80_d4_pw",
+     "c80_last2",
+     "age_last",
+     "pop_users",
+     "pop_air",
+     "tgt_air",
+     "hist_air",
+     "tgt_dur",
+     "tgt_nch",
+     "aff_ch",
+     "aff_hr",
+     "ucat",
+     "expo",
+     "u_c80_pw",
+     "u_nshow",
+     "ppr",
+     "ppr_rank",
+     "als",
+     "content"
+    ],
+    "folds": "GroupKFold(5) by user"
+   },
+   "map": 0.38011518570756936,
+   "n": 4254,
+   "candidates_per_user": 156.2867889045604,
+   "candidate_pairs": 664844,
+   "candidate_positives": 15898,
+   "candidate_recall": 0.7474377056887636,
+   "seconds": 148.7,
+   "ci95": [
+    0.3723964503996239,
+    0.3877693739225827
+   ],
+   "rerank_minus_this_ci95": [
+    0.0,
+    0.0
+   ],
+   "users_with_hit": 3810
+  }
+ },
+ "test": {
+  "popularity": {
+   "file": "f_popularity.csv",
+   "sha256": "de18aae68cc8c04d8e3b80cf4f1f06439f96a55feaaba13fdcd61a81d940c6e3",
+   "score_seconds": 0.0,
+   "distinct_ids": 5,
+   "familiar_share": 0.7257142857142858
+  },
+  "personal": {
+   "file": "f_personal.csv",
+   "sha256": "d70c82b13ca7bb743f74e9c93b3508556a1ad4310a5082181b6cac4fe5cbaddf",
+   "score_seconds": 0.1,
+   "distinct_ids": 246,
+   "familiar_share": 0.9882539682539683
+  },
+  "formula": {
+   "file": "f_formula.csv",
+   "sha256": "894eb10cacabbf85c0884a50a865459a7df02bf1d0bea639fe845e0d29af6984",
+   "score_seconds": 1.4,
+   "distinct_ids": 290,
+   "familiar_share": 0.9882539682539683
+  },
+  "content": {
+   "file": "f_content.csv",
+   "sha256": "bbaa734866ed8f152e200001828706d9c9fe111f449f0fe82bb68ff96045cca2",
+   "score_seconds": 8.4,
+   "distinct_ids": 144,
+   "familiar_share": 0.7325396825396825
+  },
+  "als": {
+   "file": "f_als.csv",
+   "sha256": "ba58e9b21600e9fd070e6ab5d39984bc2c25381e8236116a5a410730c8b4beda",
+   "score_seconds": 5.4,
+   "distinct_ids": 76,
+   "familiar_share": 0.8534920634920635
+  },
+  "ppr": {
+   "file": "f_ppr.csv",
+   "sha256": "df736eec9531440d2a6a9a43b793bf7b58859d894f9f908a5d1d926d1637b8f7",
+   "score_seconds": 12.4,
+   "distinct_ids": 220,
+   "familiar_share": 0.9425396825396826
+  },
+  "rerank": {
+   "file": "f_rerank.csv",
+   "sha256": "7014ae9585fe1dcef8898b4c8b4795db3fe3feda7a695ce5664e1959d2f761d5",
+   "candidates_per_user": 323.0626984126984,
+   "candidate_pairs": 407059,
+   "distinct_ids": 122,
+   "familiar_share": 0.8928571428571429
+  }
+ },
+ "join_val_history": {
+  "log rows": 5821987,
+  "log rows used (before clip boundary)": 3376451,
+  "log rows on a schedule channel": 3311970,
+  "log rows overlapping >=1 airing": 3021695,
+  "(view, airing) candidate pairs": 4089040,
+  "(view, airing) pairs with overlap > 0": 4089040,
+  "  of which on a labelled airing (tv_show_id != 0)": 1951485,
+  "  of which on an unlabelled airing (tv_show_id = 0)": 2137555,
+  "log rows touching >=1 labelled airing": 1575579,
+  "(user, labelled airing) pairs": 1482475,
+  "(user, labelled airing) pairs with screen time >= 0.8": 239650,
+  "  of which screen time > 1 (overlapping views of one user)": 10825
+ },
+ "join_test_history": {
+  "log rows": 5821987,
+  "log rows used (before clip boundary)": 5821987,
+  "log rows on a schedule channel": 5708408,
+  "log rows overlapping >=1 airing": 5408598,
+  "(view, airing) candidate pairs": 7752433,
+  "(view, airing) pairs with overlap > 0": 7752433,
+  "  of which on a labelled airing (tv_show_id != 0)": 3847696,
+  "  of which on an unlabelled airing (tv_show_id = 0)": 3904737,
+  "log rows touching >=1 labelled airing": 2964346,
+  "(user, labelled airing) pairs": 3014129,
+  "(user, labelled airing) pairs with screen time >= 0.8": 615979,
+  "  of which screen time > 1 (overlapping views of one user)": 24006
+ },
+ "val_accounting": {
+  "users": 4254,
+  "watched>=1": 4146,
+  "contact_below_0.8_only": 69,
+  "log_but_no_labelled_contact": 13,
+  "not_in_history_log": 26
+ },
+ "test_accounting": {
+  "users": 1260,
+  "watched>=1": 1256,
+  "contact_below_0.8_only": 2,
+  "log_but_no_labelled_contact": 2,
+  "not_in_history_log": 0
+ },
+ "val_target_ties": 2679,
+ "examples": {
+  "heavy": {
+   "user_id": "13866173795451203812",
+   "history_watched_airings": 2130,
+   "history_programmes": 482,
+   "actual_val_top5": [
+    240081,
+    2400480,
+    2400508,
+    12001682,
+    20088
+   ],
+   "lists": {
+    "popularity": [
+     2400480,
+     240081,
+     2400467,
+     200344,
+     2400508
+    ],
+    "personal": [
+     2400480,
+     12001682,
+     240081,
+     12002955,
+     2400508
+    ],
+    "formula": [
+     2400480,
+     12001682,
+     240081,
+     12002955,
+     2400508
+    ],
+    "content": [
+     2400480,
+     240081,
+     2400508,
+     2400467,
+     5900275
+    ],
+    "als": [
+     12002793,
+     12001682,
+     12001863,
+     12002806,
+     10001514
+    ],
+    "ppr": [
+     2400480,
+     12001682,
+     240081,
+     12002955,
+     2400508
+    ],
+    "rerank": [
+     2400480,
+     240081,
+     2400508,
+     2400467,
+     20088
+    ]
+   }
+  },
+  "light": {
+   "user_id": "764273904752697078",
+   "history_watched_airings": 1,
+   "history_programmes": 1,
+   "actual_val_top5": [
+    2400508,
+    90080535,
+    90080318,
+    90081125,
+    500346
+   ],
+   "lists": {
+    "popularity": [
+     2400480,
+     240081,
+     2400467,
+     200344,
+     2400508
+    ],
+    "personal": [
+     500346,
+     2400480,
+     240081,
+     2400467,
+     200344
+    ],
+    "formula": [
+     500346,
+     2400480,
+     240081,
+     2400467,
+     200344
+    ],
+    "content": [
+     500368,
+     2400480,
+     240081,
+     500280,
+     700156
+    ],
+    "als": [
+     2400340,
+     5900347,
+     200352,
+     12001682,
+     500346
+    ],
+    "ppr": [
+     500346,
+     2400480,
+     240081,
+     12001682,
+     20088
+    ],
+    "rerank": [
+     2400480,
+     6700482,
+     2400467,
+     10002514,
+     500346
+    ]
+   }
+  }
+ },
+ "seconds_total": 339.4
+}

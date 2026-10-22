@@ -1,0 +1,21 @@
+[cache] log parsed in 25.5s
+[cache] schedule 11-20 parsed in 8.5s
+[cache] schedule 21-30 parsed in 8.9s
+[cache] schedule 31-42 parsed in 10.7s
+[val:als] cohort n=4254, pool 7045; grid 5 configs x b in [0.0, 0.25, 0.5]
+[val:als] {"factors": 32, "alpha": 1, "reg": 1.0, "conf": "linear", "iters": 8} b=0.0 MAP@5 0.21974 fit 9.6s
+[val:als] {"factors": 32, "alpha": 1, "reg": 1.0, "conf": "linear", "iters": 8} b=0.25 MAP@5 0.29758 fit 9.6s
+[val:als] {"factors": 32, "alpha": 1, "reg": 1.0, "conf": "linear", "iters": 8} b=0.5 MAP@5 0.27495 fit 9.6s
+[val:als] {"factors": 32, "alpha": 3, "reg": 1.0, "conf": "linear", "iters": 8} b=0.0 MAP@5 0.21836 fit 8.0s
+[val:als] {"factors": 32, "alpha": 3, "reg": 1.0, "conf": "linear", "iters": 8} b=0.25 MAP@5 0.28498 fit 8.0s
+[val:als] {"factors": 32, "alpha": 3, "reg": 1.0, "conf": "linear", "iters": 8} b=0.5 MAP@5 0.25418 fit 8.0s
+[val:als] {"factors": 32, "alpha": 1, "reg": 1.0, "conf": "log", "iters": 8} b=0.0 MAP@5 0.22146 fit 8.0s
+[val:als] {"factors": 32, "alpha": 1, "reg": 1.0, "conf": "log", "iters": 8} b=0.25 MAP@5 0.29594 fit 8.0s
+[val:als] {"factors": 32, "alpha": 1, "reg": 1.0, "conf": "log", "iters": 8} b=0.5 MAP@5 0.28239 fit 8.0s
+[val:als] {"factors": 32, "alpha": 3, "reg": 1.0, "conf": "log", "iters": 8} b=0.0 MAP@5 0.22441 fit 4.8s
+[val:als] {"factors": 32, "alpha": 3, "reg": 1.0, "conf": "log", "iters": 8} b=0.25 MAP@5 0.29154 fit 4.8s
+[val:als] {"factors": 32, "alpha": 3, "reg": 1.0, "conf": "log", "iters": 8} b=0.5 MAP@5 0.26761 fit 4.8s
+[val:als] {"factors": 32, "alpha": 10, "reg": 1.0, "conf": "log", "iters": 8} b=0.0 MAP@5 0.20334 fit 5.5s
+[val:als] {"factors": 32, "alpha": 10, "reg": 1.0, "conf": "log", "iters": 8} b=0.25 MAP@5 0.26998 fit 5.5s
+[val:als] {"factors": 32, "alpha": 10, "reg": 1.0, "conf": "log", "iters": 8} b=0.5 MAP@5 0.23857 fit 5.5s
+[val:als] BEST {"factors": 32, "alpha": 1, "reg": 1.0, "conf": "linear", "iters": 8} b=0.25 MAP@5 0.29758

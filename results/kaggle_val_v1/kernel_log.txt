@@ -1,0 +1,238 @@
+data dir: /kaggle/input/competitions/sweettv-tv-program-recommender | python 3.13.15
+numpy 2.1.3 pandas 2.3.3 scipy 1.16.3 sklearn 1.6.1
+4
+               total        used        free      shared  buff/cache   available
+Mem:              31           0          26           0           4          30
+
+$ for m in personal ppr als content formula; do python src/run_val.py $m > results/val_${m}_stdout.txt 2>&1 & done; wait; grep -h BEST results/val_*_stdout.txt
+[val:als] BEST {"factors": 32, "alpha": 1, "reg": 1.0, "conf": "linear", "iters": 8} b=0.25 MAP@5 0.29758
+[val:personal] BEST {"half_life": 16} b=0.25 MAP@5 0.33552
+[val:ppr] BEST {"alpha": 0.3, "half_life": 8} b=0.25 MAP@5 0.34310
+[exit 0 after 750s]
+
+$ python src/explore_val.py > /dev/null
+[exit 0 after 116s]
+
+$ python src/run_rerank_val.py
+[rerank] ppr scores from {'cfg': {'alpha': 0.3, 'half_life': 8}, 'b': 0.25, 'map': 0.3431006111894688}
+[rerank] als scores from {'cfg': {'factors': 32, 'alpha': 1, 'reg': 1.0, 'conf': 'linear', 'iters': 8}, 'b': 0.25, 'map': 0.2975834508697697}
+Traceback (most recent call last):
+  File "/kaggle/working/src/run_rerank_val.py", line 23, in <module>
+    z = np.load(CACHE / f"val_{m}_best.npz"); assert np.array_equal(z["ev"][sel], ev)
+  File "/usr/local/lib/python3.13/dist-packages/numpy/lib/_npyio_impl.py", line 459, in load
+    fid = stack.enter_context(open(os.fspath(file), "rb"))
+                              ~~~~^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/kaggle/working/cache/val_content_best.npz'
+[exit 1 after 14s]
+
+=== results/explore_val_output.txt ===
+[val] history weeks 11-18 (log clipped at Monday of week 19), target weeks 19-30; split built in 11.6s
+[val] history join counts: {'log rows': 5821987, 'log rows used (before clip boundary)': 3376451, 'log rows on a schedule channel': 3311970, 'log rows overlapping >=1 airing': 3021695, '(view, airing) candidate pairs': 4089040, '(view, airing) pairs with overlap > 0': 4089040, '  of which on a labelled airing (tv_show_id != 0)': 1951485, '  of which on an unlabelled airing (tv_show_id = 0)': 2137555, 'log rows touching >=1 labelled airing': 1575579, '(user, labelled airing) pairs': 1482475, '(user, labelled airing) pairs with screen time >= 0.8': 239650, '  of which screen time > 1 (overlapping views of one user)': 10825}
+[val] target watched airings 376,227; users with >=1 4,728; users with >=5 programmes (cohort) 4,254; cohort users with a frequency tie between 5th and 6th place 2,679
+[val] cohort 4,254 = with history 4,146 + without history (cold start) 108
+[val] pool: 7,045 programmes airing in weeks 19-30; items in index space 7,446; history programmes 2,027; target top-5 ids outside pool 0
+[val] H4 repeats: 10,411 of 21,270 target slots (0.4895) are programmes the user watched in history
+[val] popularity MAP@5 0.23307  (n=4254)
+[val] popularity top-5 ids: [2400480, 240081, 2400467, 200344, 2400508]
+[val] personal re-watch half-life=None MAP@5 0.32829
+[val] personal re-watch half-life=8 MAP@5 0.31632
+[val] personal re-watch half-life=4 MAP@5 0.31093
+[val] personal re-watch half-life=2 MAP@5 0.29563
+[val] personal re-watch half-life=1 MAP@5 0.25999
+[val] personal re-watch half-life=0.5 MAP@5 0.22131
+[val] personal(hl=2) x airings^0.5 MAP@5 0.32669
+[val] personal(hl=2) x airings^1.0 MAP@5 0.31852
+total 115.1s
+
+
+=== results/val_als.txt ===
+[val:als] cohort n=4254, pool 7045; grid 5 configs x b in [0.0, 0.25, 0.5]
+[val:als] {"factors": 32, "alpha": 1, "reg": 1.0, "conf": "linear", "iters": 8} b=0.0 MAP@5 0.21974 fit 9.6s
+[val:als] {"factors": 32, "alpha": 1, "reg": 1.0, "conf": "linear", "iters": 8} b=0.25 MAP@5 0.29758 fit 9.6s
+[val:als] {"factors": 32, "alpha": 1, "reg": 1.0, "conf": "linear", "iters": 8} b=0.5 MAP@5 0.27495 fit 9.6s
+[val:als] {"factors": 32, "alpha": 3, "reg": 1.0, "conf": "linear", "iters": 8} b=0.0 MAP@5 0.21836 fit 8.0s
+[val:als] {"factors": 32, "alpha": 3, "reg": 1.0, "conf": "linear", "iters": 8} b=0.25 MAP@5 0.28498 fit 8.0s
+[val:als] {"factors": 32, "alpha": 3, "reg": 1.0, "conf": "linear", "iters": 8} b=0.5 MAP@5 0.25418 fit 8.0s
+[val:als] {"factors": 32, "alpha": 1, "reg": 1.0, "conf": "log", "iters": 8} b=0.0 MAP@5 0.22146 fit 8.0s
+[val:als] {"factors": 32, "alpha": 1, "reg": 1.0, "conf": "log", "iters": 8} b=0.25 MAP@5 0.29594 fit 8.0s
+[val:als] {"factors": 32, "alpha": 1, "reg": 1.0, "conf": "log", "iters": 8} b=0.5 MAP@5 0.28239 fit 8.0s
+[val:als] {"factors": 32, "alpha": 3, "reg": 1.0, "conf": "log", "iters": 8} b=0.0 MAP@5 0.22441 fit 4.8s
+[val:als] {"factors": 32, "alpha": 3, "reg": 1.0, "conf": "log", "iters": 8} b=0.25 MAP@5 0.29154 fit 4.8s
+[val:als] {"factors": 32, "alpha": 3, "reg": 1.0, "conf": "log", "iters": 8} b=0.5 MAP@5 0.26761 fit 4.8s
+[val:als] {"factors": 32, "alpha": 10, "reg": 1.0, "conf": "log", "iters": 8} b=0.0 MAP@5 0.20334 fit 5.5s
+[val:als] {"factors": 32, "alpha": 10, "reg": 1.0, "conf": "log", "iters": 8} b=0.25 MAP@5 0.26998 fit 5.5s
+[val:als] {"factors": 32, "alpha": 10, "reg": 1.0, "conf": "log", "iters": 8} b=0.5 MAP@5 0.23857 fit 5.5s
+[val:als] BEST {"factors": 32, "alpha": 1, "reg": 1.0, "conf": "linear", "iters": 8} b=0.25 MAP@5 0.29758
+
+
+=== results/val_als_stdout.txt ===
+[cache] log parsed in 25.5s
+[cache] schedule 11-20 parsed in 8.5s
+[cache] schedule 21-30 parsed in 8.9s
+[cache] schedule 31-42 parsed in 10.7s
+[val:als] cohort n=4254, pool 7045; grid 5 configs x b in [0.0, 0.25, 0.5]
+[val:als] {"factors": 32, "alpha": 1, "reg": 1.0, "conf": "linear", "iters": 8} b=0.0 MAP@5 0.21974 fit 9.6s
+[val:als] {"factors": 32, "alpha": 1, "reg": 1.0, "conf": "linear", "iters": 8} b=0.25 MAP@5 0.29758 fit 9.6s
+[val:als] {"factors": 32, "alpha": 1, "reg": 1.0, "conf": "linear", "iters": 8} b=0.5 MAP@5 0.27495 fit 9.6s
+[val:als] {"factors": 32, "alpha": 3, "reg": 1.0, "conf": "linear", "iters": 8} b=0.0 MAP@5 0.21836 fit 8.0s
+[val:als] {"factors": 32, "alpha": 3, "reg": 1.0, "conf": "linear", "iters": 8} b=0.25 MAP@5 0.28498 fit 8.0s
+[val:als] {"factors": 32, "alpha": 3, "reg": 1.0, "conf": "linear", "iters": 8} b=0.5 MAP@5 0.25418 fit 8.0s
+[val:als] {"factors": 32, "alpha": 1, "reg": 1.0, "conf": "log", "iters": 8} b=0.0 MAP@5 0.22146 fit 8.0s
+[val:als] {"factors": 32, "alpha": 1, "reg": 1.0, "conf": "log", "iters": 8} b=0.25 MAP@5 0.29594 fit 8.0s
+[val:als] {"factors": 32, "alpha": 1, "reg": 1.0, "conf": "log", "iters": 8} b=0.5 MAP@5 0.28239 fit 8.0s
+[val:als] {"factors": 32, "alpha": 3, "reg": 1.0, "conf": "log", "iters": 8} b=0.0 MAP@5 0.22441 fit 4.8s
+[val:als] {"factors": 32, "alpha": 3, "reg": 1.0, "conf": "log", "iters": 8} b=0.25 MAP@5 0.29154 fit 4.8s
+[val:als] {"factors": 32, "alpha": 3, "reg": 1.0, "conf": "log", "iters": 8} b=0.5 MAP@5 0.26761 fit 4.8s
+[val:als] {"factors": 32, "alpha": 10, "reg": 1.0, "conf": "log", "iters": 8} b=0.0 MAP@5 0.20334 fit 5.5s
+[val:als] {"factors": 32, "alpha": 10, "reg": 1.0, "conf": "log", "iters": 8} b=0.25 MAP@5 0.26998 fit 5.5s
+[val:als] {"factors": 32, "alpha": 10, "reg": 1.0, "conf": "log", "iters": 8} b=0.5 MAP@5 0.23857 fit 5.5s
+[val:als] BEST {"factors": 32, "alpha": 1, "reg": 1.0, "conf": "linear", "iters": 8} b=0.25 MAP@5 0.29758
+
+
+=== results/val_content_stdout.txt ===
+[cache] log parsed in 25.3s
+Traceback (most recent call last):
+  File "/kaggle/working/src/run_val.py", line 28, in <module>
+    V = Split("val", 18, (19, 30), quiet=True)
+  File "/kaggle/working/src/pipeline.py", line 39, in __init__
+    L = L if L is not None else load_log()
+                                ~~~~~~~~^^
+  File "/kaggle/working/src/common.py", line 46, in load_log
+    return {k: z[k] for k in z.files}
+               ~^^^
+  File "/usr/local/lib/python3.13/dist-packages/numpy/lib/_npyio_impl.py", line 258, in __getitem__
+    return format.read_array(bytes,
+           ~~~~~~~~~~~~~~~~~^^^^^^^
+                             allow_pickle=self.allow_pickle,
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                             pickle_kwargs=self.pickle_kwargs,
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                             max_header_size=self.max_header_size)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/numpy/lib/format.py", line 858, in read_array
+    data = _read_bytes(fp, read_size, "array data")
+  File "/usr/local/lib/python3.13/dist-packages/numpy/lib/format.py", line 993, in _read_bytes
+    r = fp.read(size - len(data))
+  File "/usr/lib/python3.13/zipfile/__init__.py", line 1036, in read
+    data = self._read1(n)
+  File "/usr/lib/python3.13/zipfile/__init__.py", line 1106, in _read1
+    data = self._read2(n)
+  File "/usr/lib/python3.13/zipfile/__init__.py", line 1139, in _read2
+    raise EOFError
+EOFError
+
+
+=== results/val_formula_stdout.txt ===
+[cache] log parsed in 24.9s
+Traceback (most recent call last):
+  File "/kaggle/working/src/run_val.py", line 28, in <module>
+    V = Split("val", 18, (19, 30), quiet=True)
+  File "/kaggle/working/src/pipeline.py", line 39, in __init__
+    L = L if L is not None else load_log()
+                                ~~~~~~~~^^
+  File "/kaggle/working/src/common.py", line 45, in load_log
+    z = np.load(f)
+  File "/usr/local/lib/python3.13/dist-packages/numpy/lib/_npyio_impl.py", line 468, in load
+    raise EOFError("No data left in file")
+EOFError: No data left in file
+
+
+=== results/val_personal.txt ===
+[val:personal] cohort n=4254, pool 7045; grid 3 configs x b in [0.0, 0.25, 0.5]
+[val:personal] {"half_life": null} b=0.0 MAP@5 0.32829 fit 0.2s
+[val:personal] {"half_life": null} b=0.25 MAP@5 0.33468 fit 0.2s
+[val:personal] {"half_life": null} b=0.5 MAP@5 0.33290 fit 0.2s
+[val:personal] {"half_life": 16} b=0.0 MAP@5 0.31623 fit 0.2s
+[val:personal] {"half_life": 16} b=0.25 MAP@5 0.33552 fit 0.2s
+[val:personal] {"half_life": 16} b=0.5 MAP@5 0.33391 fit 0.2s
+[val:personal] {"half_life": 8} b=0.0 MAP@5 0.31632 fit 0.2s
+[val:personal] {"half_life": 8} b=0.25 MAP@5 0.33473 fit 0.2s
+[val:personal] {"half_life": 8} b=0.5 MAP@5 0.33414 fit 0.2s
+[val:personal] BEST {"half_life": 16} b=0.25 MAP@5 0.33552
+
+
+=== results/val_personal_stdout.txt ===
+[cache] log parsed in 25.5s
+[cache] schedule 11-20 parsed in 9.3s
+[cache] schedule 21-30 parsed in 5.4s
+[cache] schedule 31-42 parsed in 8.5s
+[val:personal] cohort n=4254, pool 7045; grid 3 configs x b in [0.0, 0.25, 0.5]
+[val:personal] {"half_life": null} b=0.0 MAP@5 0.32829 fit 0.2s
+[val:personal] {"half_life": null} b=0.25 MAP@5 0.33468 fit 0.2s
+[val:personal] {"half_life": null} b=0.5 MAP@5 0.33290 fit 0.2s
+[val:personal] {"half_life": 16} b=0.0 MAP@5 0.31623 fit 0.2s
+[val:personal] {"half_life": 16} b=0.25 MAP@5 0.33552 fit 0.2s
+[val:personal] {"half_life": 16} b=0.5 MAP@5 0.33391 fit 0.2s
+[val:personal] {"half_life": 8} b=0.0 MAP@5 0.31632 fit 0.2s
+[val:personal] {"half_life": 8} b=0.25 MAP@5 0.33473 fit 0.2s
+[val:personal] {"half_life": 8} b=0.5 MAP@5 0.33414 fit 0.2s
+[val:personal] BEST {"half_life": 16} b=0.25 MAP@5 0.33552
+
+
+=== results/val_ppr.txt ===
+[val:ppr] cohort n=4254, pool 7045; grid 8 configs x b in [0.0, 0.25, 0.5]
+[val:ppr] {"alpha": 0.3, "half_life": null} b=0.0 MAP@5 0.33566 fit 32.8s iters=12 resid=5.98e-10
+[val:ppr] {"alpha": 0.3, "half_life": null} b=0.25 MAP@5 0.34243 fit 32.8s iters=12 resid=5.98e-10
+[val:ppr] {"alpha": 0.3, "half_life": null} b=0.5 MAP@5 0.32840 fit 32.8s iters=12 resid=5.98e-10
+[val:ppr] {"alpha": 0.3, "half_life": 8} b=0.0 MAP@5 0.33385 fit 28.9s iters=12 resid=6.33e-10
+[val:ppr] {"alpha": 0.3, "half_life": 8} b=0.25 MAP@5 0.34310 fit 28.9s iters=12 resid=6.33e-10
+[val:ppr] {"alpha": 0.3, "half_life": 8} b=0.5 MAP@5 0.32911 fit 28.9s iters=12 resid=6.33e-10
+[val:ppr] {"alpha": 0.5, "half_life": null} b=0.0 MAP@5 0.34019 fit 38.3s iters=17 resid=5.61e-10
+[val:ppr] {"alpha": 0.5, "half_life": null} b=0.25 MAP@5 0.33185 fit 38.3s iters=17 resid=5.61e-10
+[val:ppr] {"alpha": 0.5, "half_life": null} b=0.5 MAP@5 0.31415 fit 38.3s iters=17 resid=5.61e-10
+[val:ppr] {"alpha": 0.5, "half_life": 8} b=0.0 MAP@5 0.33903 fit 37.7s iters=17 resid=8.05e-10
+[val:ppr] {"alpha": 0.5, "half_life": 8} b=0.25 MAP@5 0.33378 fit 37.7s iters=17 resid=8.05e-10
+[val:ppr] {"alpha": 0.5, "half_life": 8} b=0.5 MAP@5 0.31479 fit 37.7s iters=17 resid=8.05e-10
+[val:ppr] {"alpha": 0.7, "half_life": null} b=0.0 MAP@5 0.32661 fit 54.0s iters=24 resid=5.03e-10
+[val:ppr] {"alpha": 0.7, "half_life": null} b=0.25 MAP@5 0.31219 fit 54.0s iters=24 resid=5.03e-10
+[val:ppr] {"alpha": 0.7, "half_life": null} b=0.5 MAP@5 0.28941 fit 54.0s iters=24 resid=5.03e-10
+[val:ppr] {"alpha": 0.7, "half_life": 8} b=0.0 MAP@5 0.32650 fit 53.4s iters=24 resid=8.58e-10
+[val:ppr] {"alpha": 0.7, "half_life": 8} b=0.25 MAP@5 0.31240 fit 53.4s iters=24 resid=8.58e-10
+[val:ppr] {"alpha": 0.7, "half_life": 8} b=0.5 MAP@5 0.28975 fit 53.4s iters=24 resid=8.58e-10
+[val:ppr] {"alpha": 0.85, "half_life": null} b=0.0 MAP@5 0.29821 fit 66.5s iters=30 resid=3.98e-09
+[val:ppr] {"alpha": 0.85, "half_life": null} b=0.25 MAP@5 0.28448 fit 66.5s iters=30 resid=3.98e-09
+[val:ppr] {"alpha": 0.85, "half_life": null} b=0.5 MAP@5 0.25240 fit 66.5s iters=30 resid=3.98e-09
+[val:ppr] {"alpha": 0.85, "half_life": 8} b=0.0 MAP@5 0.29952 fit 67.4s iters=30 resid=2.33e-09
+[val:ppr] {"alpha": 0.85, "half_life": 8} b=0.25 MAP@5 0.28488 fit 67.4s iters=30 resid=2.33e-09
+[val:ppr] {"alpha": 0.85, "half_life": 8} b=0.5 MAP@5 0.24997 fit 67.4s iters=30 resid=2.33e-09
+[val:ppr] BEST {"alpha": 0.3, "half_life": 8} b=0.25 MAP@5 0.34310
+
+
+=== results/val_ppr_stdout.txt ===
+[cache] log parsed in 25.4s
+[cache] schedule 11-20 parsed in 7.1s
+[cache] schedule 21-30 parsed in 10.4s
+[cache] schedule 31-42 parsed in 11.0s
+[val:ppr] cohort n=4254, pool 7045; grid 8 configs x b in [0.0, 0.25, 0.5]
+[val:ppr] {"alpha": 0.3, "half_life": null} b=0.0 MAP@5 0.33566 fit 32.8s iters=12 resid=5.98e-10
+[val:ppr] {"alpha": 0.3, "half_life": null} b=0.25 MAP@5 0.34243 fit 32.8s iters=12 resid=5.98e-10
+[val:ppr] {"alpha": 0.3, "half_life": null} b=0.5 MAP@5 0.32840 fit 32.8s iters=12 resid=5.98e-10
+[val:ppr] {"alpha": 0.3, "half_life": 8} b=0.0 MAP@5 0.33385 fit 28.9s iters=12 resid=6.33e-10
+[val:ppr] {"alpha": 0.3, "half_life": 8} b=0.25 MAP@5 0.34310 fit 28.9s iters=12 resid=6.33e-10
+[val:ppr] {"alpha": 0.3, "half_life": 8} b=0.5 MAP@5 0.32911 fit 28.9s iters=12 resid=6.33e-10
+[val:ppr] {"alpha": 0.5, "half_life": null} b=0.0 MAP@5 0.34019 fit 38.3s iters=17 resid=5.61e-10
+[val:ppr] {"alpha": 0.5, "half_life": null} b=0.25 MAP@5 0.33185 fit 38.3s iters=17 resid=5.61e-10
+[val:ppr] {"alpha": 0.5, "half_life": null} b=0.5 MAP@5 0.31415 fit 38.3s iters=17 resid=5.61e-10
+[val:ppr] {"alpha": 0.5, "half_life": 8} b=0.0 MAP@5 0.33903 fit 37.7s iters=17 resid=8.05e-10
+[val:ppr] {"alpha": 0.5, "half_life": 8} b=0.25 MAP@5 0.33378 fit 37.7s iters=17 resid=8.05e-10
+[val:ppr] {"alpha": 0.5, "half_life": 8} b=0.5 MAP@5 0.31479 fit 37.7s iters=17 resid=8.05e-10
+[val:ppr] {"alpha": 0.7, "half_life": null} b=0.0 MAP@5 0.32661 fit 54.0s iters=24 resid=5.03e-10
+[val:ppr] {"alpha": 0.7, "half_life": null} b=0.25 MAP@5 0.31219 fit 54.0s iters=24 resid=5.03e-10
+[val:ppr] {"alpha": 0.7, "half_life": null} b=0.5 MAP@5 0.28941 fit 54.0s iters=24 resid=5.03e-10
+[val:ppr] {"alpha": 0.7, "half_life": 8} b=0.0 MAP@5 0.32650 fit 53.4s iters=24 resid=8.58e-10
+[val:ppr] {"alpha": 0.7, "half_life": 8} b=0.25 MAP@5 0.31240 fit 53.4s iters=24 resid=8.58e-10
+[val:ppr] {"alpha": 0.7, "half_life": 8} b=0.5 MAP@5 0.28975 fit 53.4s iters=24 resid=8.58e-10
+[val:ppr] {"alpha": 0.85, "half_life": null} b=0.0 MAP@5 0.29821 fit 66.5s iters=30 resid=3.98e-09
+[val:ppr] {"alpha": 0.85, "half_life": null} b=0.25 MAP@5 0.28448 fit 66.5s iters=30 resid=3.98e-09
+[val:ppr] {"alpha": 0.85, "half_life": null} b=0.5 MAP@5 0.25240 fit 66.5s iters=30 resid=3.98e-09
+[val:ppr] {"alpha": 0.85, "half_life": 8} b=0.0 MAP@5 0.29952 fit 67.4s iters=30 resid=2.33e-09
+[val:ppr] {"alpha": 0.85, "half_life": 8} b=0.25 MAP@5 0.28488 fit 67.4s iters=30 resid=2.33e-09
+[val:ppr] {"alpha": 0.85, "half_life": 8} b=0.5 MAP@5 0.24997 fit 67.4s iters=30 resid=2.33e-09
+[val:ppr] BEST {"alpha": 0.3, "half_life": 8} b=0.25 MAP@5 0.34310
+
+/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+  cells[i][c] = re.sub('\\\\\|', '|', cell)
+/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+  text = re.sub(r'_', '\_', text) # Escape underscores in display text
+[NbConvertApp] Converting notebook __script__.ipynb to html
+[NbConvertApp] Writing 428705 bytes to __results__.html

@@ -1,0 +1,11 @@
+[val:personal] cohort n=4254, pool 7045; grid 3 configs x b in [0.0, 0.25, 0.5]
+[val:personal] {"half_life": null} b=0.0 MAP@5 0.32829 fit 0.1s
+[val:personal] {"half_life": null} b=0.25 MAP@5 0.33468 fit 0.1s
+[val:personal] {"half_life": null} b=0.5 MAP@5 0.33290 fit 0.1s
+[val:personal] {"half_life": 16} b=0.0 MAP@5 0.31623 fit 0.1s
+[val:personal] {"half_life": 16} b=0.25 MAP@5 0.33552 fit 0.1s
+[val:personal] {"half_life": 16} b=0.5 MAP@5 0.33391 fit 0.1s
+[val:personal] {"half_life": 8} b=0.0 MAP@5 0.31632 fit 0.1s
+[val:personal] {"half_life": 8} b=0.25 MAP@5 0.33473 fit 0.1s
+[val:personal] {"half_life": 8} b=0.5 MAP@5 0.33414 fit 0.1s
+[val:personal] BEST {"half_life": 16} b=0.25 MAP@5 0.33552

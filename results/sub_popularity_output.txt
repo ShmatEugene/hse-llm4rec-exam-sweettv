@@ -1,0 +1,2 @@
+[test] pool 6,642 programmes airing weeks 31-42; history programmes 3,867; test users with history 1,256 of 1,260
+[test] popularity top-5: [2400480, 240081, 2400467, 2400508, 200344] -> 01_popularity.csv

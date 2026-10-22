@@ -1,0 +1,10 @@
+[stdlib] done in 48.4s
+[stdlib] log rows: 5,821,987
+[stdlib] log rows on a schedule channel: 5,708,408
+[stdlib] log rows overlapping >=1 airing: 5,408,598
+[stdlib] log rows touching >=1 labelled airing: 2,964,346
+[stdlib] (view, airing) pairs with overlap > 0: 7,752,424
+[stdlib] (user, labelled airing) pairs: 3,014,129
+[stdlib] (user, labelled airing) pairs with screen time >= 0.8: 615,979
+[stdlib] distinct (user, programme) pairs with >=1 watched airing: 230,113
+[compare] (user, programme) pairs: stdlib 230,113 vs numpy 230,113; keys in only one: 0; same key, different frequency: 0; total watched airings stdlib 615,979 vs numpy 615,979

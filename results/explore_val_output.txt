@@ -1,0 +1,17 @@
+[val] history weeks 11-18 (log clipped at Monday of week 19), target weeks 19-30; split built in 7.8s
+[val] history join counts: {'log rows': 5821987, 'log rows used (before clip boundary)': 3376451, 'log rows on a schedule channel': 3311970, 'log rows overlapping >=1 airing': 3021695, '(view, airing) candidate pairs': 4089040, '(view, airing) pairs with overlap > 0': 4089040, '  of which on a labelled airing (tv_show_id != 0)': 1951485, '  of which on an unlabelled airing (tv_show_id = 0)': 2137555, 'log rows touching >=1 labelled airing': 1575579, '(user, labelled airing) pairs': 1482475, '(user, labelled airing) pairs with screen time >= 0.8': 239650, '  of which screen time > 1 (overlapping views of one user)': 10825}
+[val] target watched airings 376,227; users with >=1 4,728; users with >=5 programmes (cohort) 4,254; cohort users with a frequency tie between 5th and 6th place 2,679
+[val] cohort 4,254 = with history 4,146 + without history (cold start) 108
+[val] pool: 7,045 programmes airing in weeks 19-30; items in index space 7,446; history programmes 2,027; target top-5 ids outside pool 0
+[val] H4 repeats: 10,411 of 21,270 target slots (0.4895) are programmes the user watched in history
+[val] popularity MAP@5 0.23307  (n=4254)
+[val] popularity top-5 ids: [2400480, 240081, 2400467, 200344, 2400508]
+[val] personal re-watch half-life=None MAP@5 0.32829
+[val] personal re-watch half-life=8 MAP@5 0.31632
+[val] personal re-watch half-life=4 MAP@5 0.31093
+[val] personal re-watch half-life=2 MAP@5 0.29563
+[val] personal re-watch half-life=1 MAP@5 0.25999
+[val] personal re-watch half-life=0.5 MAP@5 0.22131
+[val] personal(hl=2) x airings^0.5 MAP@5 0.32669
+[val] personal(hl=2) x airings^1.0 MAP@5 0.31852
+total 61.7s

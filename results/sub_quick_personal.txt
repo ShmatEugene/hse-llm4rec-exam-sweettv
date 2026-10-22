@@ -1,0 +1,1 @@
+[test] personal cfg={'half_life': 16} b=0.25 (validation MAP@5 0.33552) -> 02_personal.csv

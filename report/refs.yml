@@ -1,0 +1,83 @@
+exam:
+    type: misc
+    title: "Final Exam Quiz (AVITO): TV Program Recommendation on sweet.tv (LLM4Rec course, HSE University)"
+    author: Jin, Seungmin
+    date: 2026-10
+
+kaggle:
+    type: web
+    title: "sweet.tv --- TV program recommender (Kaggle community competition, host ogurbych; Overview, Data and Evaluation pages)"
+    author: ogurbych (Kaggle host)
+    date: 2020
+    url:
+        value: https://www.kaggle.com/competitions/sweettv-tv-program-recommender
+        date: 2026-10-22
+
+hu2008:
+    type: article
+    title: "Collaborative Filtering for Implicit Feedback Datasets"
+    author:
+        - Hu, Yifan
+        - Koren, Yehuda
+        - Volinsky, Chris
+    date: 2008-12
+    page-range: 263-272
+    url:
+        value: https://yifanhu.net/PUB/cf.pdf
+        date: 2026-10-22
+    parent:
+        type: proceedings
+        title: "Proceedings of the 8th IEEE International Conference on Data Mining (ICDM 2008)"
+
+jeh2003:
+    type: article
+    title: "Scaling Personalized Web Search"
+    author:
+        - Jeh, Glen
+        - Widom, Jennifer
+    date: 2003
+    page-range: "271"
+    url:
+        value: http://infolab.stanford.edu/~glenj/spws.pdf
+        date: 2026-10-22
+    parent:
+        type: proceedings
+        title: "Proceedings of the 12th International Conference on World Wide Web (WWW 2003)"
+
+hamner:
+    type: repository
+    title: "Metrics: machine learning evaluation metrics (Python ml_metrics, average_precision.py: apk, mapk)"
+    author: Hamner, Ben
+    url:
+        value: https://github.com/benhamner/Metrics
+        date: 2026-10-22
+
+sklearn:
+    type: article
+    title: "Scikit-learn: Machine Learning in Python"
+    author:
+        - Pedregosa, Fabian
+        - Varoquaux, Gaël
+        - Gramfort, Alexandre
+        - Michel, Vincent
+        - Thirion, Bertrand
+        - Grisel, Olivier
+        - Blondel, Mathieu
+        - Prettenhofer, Peter
+        - Weiss, Ron
+        - Dubourg, Vincent
+        - Vanderplas, Jake
+        - Passos, Alexandre
+        - Cournapeau, David
+        - Brucher, Matthieu
+        - Perrot, Matthieu
+        - Duchesnay, Édouard
+    date: 2011
+    page-range: 2825-2830
+    url:
+        value: https://jmlr.org/papers/v12/pedregosa11a.html
+        date: 2026-10-22
+    parent:
+        type: periodical
+        title: Journal of Machine Learning Research
+        volume: 12
