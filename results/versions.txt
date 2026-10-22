@@ -5,3 +5,4 @@ numpy 1.24.4
 pandas 2.2.1
 scipy 1.9.1
 kaggle CLI 2.2.4 (Python 3.12.0)
+claude code 2.1.308 (CLI), model claude-opus-5-5

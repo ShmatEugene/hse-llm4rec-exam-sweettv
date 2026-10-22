@@ -86,6 +86,8 @@ p(f"[target] stdlib cohort {len(target):,} vs pipeline {len(mine):,}; users only
 
 # 3. MAP@5 of every exported validation Top-5 list, with the stdlib target and with this file's ap5
 dump = json.load(open(RES / "dump.json"))
+if (RES / "rerank_v2.json").exists():  # the designated final's configuration (round 2, src/rerank_v2.py)
+    dump["val"]["rerank_v2"] = {"map": json.load(open(RES / "rerank_v2.json"))["map"]}
 for m, v in dump["val"].items():
     f = RES / f"val_top5_{m}.csv"
     pred = {r["user_id"]: [int(x) for x in r["top5"].split()] for r in csv.DictReader(open(f))}

@@ -30,8 +30,16 @@ meta = load_meta()
 title = meta.groupby("tv_show_id").tv_show_title.agg(lambda s: s.value_counts().index[0])
 cat = meta.groupby("tv_show_id").tv_show_category.first()
 short = lambda i: esc(title.get(str(i), "?").strip(".").replace("М/с ", "").replace("Т/с ", "").replace("Х/ф ", "")[:26])
+import csv
+v2lists = {r["user_id"]: [int(x) for x in r["top5"].split()] for r in csv.DictReader(open(R / "val_top5_rerank_v2.csv"))} \
+    if (R / "val_top5_rerank_v2.csv").exists() else {}
+sys.path.insert(0, str(ROOT / "src")); from pipeline import apk
+ex_log = []
 for tag, ex in dump["examples"].items():
     act = set(ex["actual_val_top5"])
+    if ex["user_id"] in v2lists:
+        ex["lists"]["rerank_v2"] = v2lists[ex["user_id"]]
+    ex_log.append(f"{tag} user {ex['user_id']}: " + ", ".join(f"{m} AP@5 {apk(ex['actual_val_top5'], ids):.4f}" for m, ids in ex["lists"].items()))
     t.append(f"#let ex_{tag} = table(columns: 6, table.header([Method], [\\#1], [\\#2], [\\#3], [\\#4], [\\#5]),")
     t.append("  [*actual 19--30*], " + ", ".join(f"[{i} {short(i)} ({cat.get(str(i), '?')})]" for i in ex["actual_val_top5"]) + ",")
     for m, ids in ex["lists"].items():
@@ -39,4 +47,5 @@ for tag, ex in dump["examples"].items():
     t.append(")")
 (ROOT / "report").mkdir(exist_ok=True)
 (ROOT / "report" / "tables.typ").write_text("\n".join(t) + "\n")
+(R / "examples_ap.txt").write_text("\n".join(ex_log) + "\n")
 print(f"wrote report/tables.typ: {len(rows)} submissions, examples {list(dump['examples'])}")

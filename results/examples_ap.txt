@@ -1,0 +1,2 @@
+heavy user 13866173795451203812: popularity AP@5 0.5200, personal AP@5 0.7600, formula AP@5 0.7600, content AP@5 0.6000, als AP@5 0.1000, ppr AP@5 0.7600, rerank AP@5 0.7600, rerank_v2 AP@5 0.8000
+light user 764273904752697078: popularity AP@5 0.0400, personal AP@5 0.2000, formula AP@5 0.2000, content AP@5 0.0000, als AP@5 0.0400, ppr AP@5 0.2000, rerank AP@5 0.0400, rerank_v2 AP@5 0.0000

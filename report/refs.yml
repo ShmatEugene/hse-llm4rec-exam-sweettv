@@ -29,20 +29,11 @@ hu2008:
         type: proceedings
         title: "Proceedings of the 8th IEEE International Conference on Data Mining (ICDM 2008)"
 
-jeh2003:
-    type: article
-    title: "Scaling Personalized Web Search"
-    author:
-        - Jeh, Glen
-        - Widom, Jennifer
-    date: 2003
-    page-range: "271"
-    url:
-        value: http://infolab.stanford.edu/~glenj/spws.pdf
-        date: 2026-10-22
-    parent:
-        type: proceedings
-        title: "Proceedings of the 12th International Conference on World Wide Web (WWW 2003)"
+lecture:
+    type: misc
+    title: "LLM4RecSys 06. Graph-based RecSys (lecture slides: PageRank and Personalized PageRank; LLM4Rec course, HSE University)"
+    author: Jin, Seungmin
+    date: 2026
 
 hamner:
     type: repository

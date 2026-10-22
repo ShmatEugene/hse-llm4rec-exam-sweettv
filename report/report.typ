@@ -29,13 +29,13 @@
 #block(inset: (x: 0.6cm))[
   #text(weight: "bold")[Abstract] --- sweet.tv must name the five TV programmes each of 1,260 users will watch most
   often in weeks 31--42, but its view log records only channel and time, and only 10.8% of the weeks 11--20 schedule rows
-  carry a programme id. I joined the log to the schedule with the organisers' own rule (an airing counts when the user
-  saw at least 80% of it) and compared popularity, a personal re-watch count, content-based TF-IDF, implicit ALS and
+  carry a programme id. I joined the log to the schedule with the organisers' rule (an airing counts when at least 80% of
+  it was seen) and compared popularity, a personal re-watch count, content-based TF-IDF, implicit ALS and
   Personalized PageRank on a 12-week temporal hold-out, then combined them with a gradient-boosted re-ranker scored out of
   fold by user. The re-ranker reaches validation MAP\@5 0.38095 against 0.34310 for PPR and 0.23307 for popularity,
   and its returned Kaggle public score is 0.45173 (private 0.44638). Because 89.06% of its test slots are programmes
   the user already watched, the platform should serve a habit-aware "your shows" rail and treat discovery of new
-  programmes as a separate, explicitly labelled problem.
+  programmes as a separate problem.
 
   #v(0.05em)
   #text(style: "italic")[Index Terms] --- TV recommendation, implicit feedback, personalized PageRank, learning to re-rank, MAP\@K.
@@ -63,8 +63,9 @@ offline reach, coverage and repeat-share numbers, not on an online claim.
 
 Hu, Koren and Volinsky @hu2008 treat implicit feedback as a binary preference $p_(u i)$ with confidence
 $c_(u i) = 1 + alpha r_(u i)$ (or $1 + alpha log(1 + r_(u i) slash epsilon)$) and solve it by alternating least squares; they
-report $alpha = 40$ as a good value on their TV data, which I tested and which fails here (§4). Jeh and Widom @jeh2003 make
-PageRank personal through the restart vector; I use a one-hot user restart on the user--programme graph. The competition
+report $alpha = 40$ as a good value on their TV data, which I tested and which fails here (§4). The course lecture on
+graph recommenders @lecture covers random walks and PageRank and personalises them through the restart distribution
+(user-seeded PPR, α = link-following probability); I use a one-hot user restart on the user--programme graph. The competition
 pages @kaggle fix the data provenance, the screen-time ≥ 0.8 rule and the strict top-5 answer; Hamner's `apk`
 @hamner is the Kaggle reference MAP\@K (division by $min(|A|, K)$, repeated predictions not re-counted). The re-ranker uses
 scikit-learn's histogram gradient boosting @sklearn; the exam statement @exam fixes K = 5 and the protocol.
@@ -92,7 +93,7 @@ five distinct pool ids. *Methods.* _Popularity_: distinct history users with a w
 watched-airing count with an exponential half-life. _Formula_ (proposed by me in the session): count × mean view rating
 ($5$ if screen time ≥ 0.99, else $2 + 9 s^2$) × recency × $log(1 + "pop")$. _Content_: TF-IDF over category, genres, decade,
 director and actor tokens; profile = count-weighted sum; cosine. _ALS_ @hu2008: exact per-row solves with the
-$Y^top Y + Y^top (C_u - I) Y$ identity. _PPR_ @jeh2003: bipartite walk with restart at the user, iterated to an L1 change
+$Y^top Y + Y^top (C_u - I) Y$ identity. _PPR_ @lecture: bipartite walk with restart at the user, iterated to an L1 change
 below $10^(-9)$. All but popularity can be multiplied by (target-window airings)$""^b$, $b in {0, 0.25, 0.5}$ chosen on
 validation, because the answer counts airings: _ТСН_ (2400480) has 1,434 airings in weeks 19--30, a weekly film one. *Hybrid.* Candidates =
 programmes the user touched in history ∪ top-30 by PPR ∪ top-30 by popularity ∪ top-30 by channel exposure (target
@@ -144,6 +145,10 @@ over PPR (0.40662). Round 2 itself is not a validated gain: 60 candidates raise 
 MAP\@5 only from 0.38012 to 0.38095, a difference with 95% interval [−0.00111, +0.00270]; 600 trees gave 0.37962 and the
 Poisson objective 0.36886. Its public step (0.44803 → 0.45173) is of the same size, so I read it as noise-level, not as
 evidence.
+
+#figure(image("/assets/kaggle_public_score.png", width: 88%), caption: [Returned score of the designated final as shown on
+Kaggle (my screenshot): `08_rerank_v2.csv`, private 0.44638, public 0.45173 --- the same values as ref 57536324 in
+`kaggle competitions submissions` (`results/kaggle_submissions.txt`).])
 Every method beats popularity on public; on validation personal, formula and PPR lie between 0.33170 and 0.34310, and the
 re-ranker is the only method whose interval overlaps no other.
 
@@ -160,9 +165,9 @@ The heavy user has 2,130 watched airings of 482 programmes in weeks 11--18 (2,13
 the light user has one watched airing. Hits are starred.
 
 #figure(ex_heavy, caption: [Heavy user 13866173795451203812. AP\@5: popularity 0.52, personal/formula/PPR 0.76, content 0.60,
-ALS 0.10, re-ranker 0.76.])
+ALS 0.10, re-ranker round 1 0.76, final (`rerank_v2`) 0.80.])
 #figure(ex_light, caption: [Light user 764273904752697078. AP\@5: popularity 0.04, personal/formula/PPR 0.20, content 0.00,
-ALS 0.04, re-ranker 0.04.])
+ALS 0.04, re-ranker round 1 0.04, final (`rerank_v2`) 0.00.])
 
 == 4.4 Verification
 
@@ -187,7 +192,7 @@ found no cached scores. _Root cause:_ five grids started in parallel on a cold c
 while another was still writing it. _Fix:_ atomic writes (temporary file + `os.replace`) and one warm-up process before the
 parallel launch. _Confirmation:_ kernel v2 exited 0 in every step and reproduced the local values (personal 0.33552, PPR
 0.34310, ALS 0.29758). *Failure case 3 --- the re-ranker hurts thin histories.* _Detection:_ the light user drops from
-0.20 (personal, PPR) to 0.04: the model replaces the one programme the user watched with habit-driven news. _Root cause:_
+0.20 (personal, PPR) to 0.04 (round 1) and 0.00 (final): the model replaces the one programme the user watched with habit-driven news. _Root cause:_
 its features for that user are almost all zero, so popularity-like features decide. _Proposed fix:_ a switching rule ---
 users with fewer than _k_ watched airings get the PPR list. _Honest status:_ a proposal, not a measurement; it is cheap to test
 by bucketing the 4,254 out-of-fold APs by history size.
@@ -222,7 +227,9 @@ differs from mine. No online effect, A/B result or revenue is claimed; every num
 = 6. AI Usage Disclosure
 
 *Tools and session.* Claude Code 2.1.308 (CLI), model Claude Opus 5.5 (`claude-opus-5-5`), one session
-`35d97a0d-5715-4a99-b207-aca036c0609f`, submitted unmodified as `eugene_shmat_exam_session.json`; SESSION-COUNTS.
+`35d97a0d-5715-4a99-b207-aca036c0609f`, submitted unmodified as `eugene_shmat_exam_session.json`; when this PDF was compiled it held 12 prompt entries of mine
+(my `!` commands included) plus 5 messages typed while the agent worked, 400 assistant messages and 160 tool calls
+(128 Bash, 20 Write, 8 Edit, 4 Read; `eval/session_stats.py`); the session continues after that only to commit, push and copy the log.
 The agent wrote every file in `src/`, `eval/`, `kaggle/` and `report/` of the repository, ran the private Kaggle kernel
 `shmate/sweettv-exam-val` (versions 1--3) and made the eight submissions under my blanket approval of up to eight; it
 modified no data file. It was used for code generation, the data audit, debugging and the first draft of this report,
@@ -230,20 +237,25 @@ which I read. *My direction, visible in the session.* I gave the process rules, 
 submissions, found the IR-book URL I had been offered broken (the assistant's `curl` then returned 000 and the source was
 dropped), sent the list of ideas that became the re-ranker's feature groups and the formula scorer, and expected a personal
 ranker to land near 0.4 public when the assistant had only tested recency decay --- the personal list then returned 0.40431.
-I also moved the heavy runs to Kaggle kernels. *What I personally verified --- the hand chain on user 70601421848869461
+I also moved the heavy runs to Kaggle kernels, and I opened the version-3 kernel log on Kaggle myself and pasted it into
+the session: its values (0.38012, 0.38095, interval [−0.00111, +0.00270], the sha256 of `f_rerank_v2.csv`) equal the output
+the assistant downloaded. *What I personally verified --- the hand chain on user 70601421848869461
 (`eval/hand.py`, inputs only, my answers in the session before the code's).* (a) Join: the view 16:35:30--17:15:50 covers
 the airing 16:45:00 + 1500 s, overlap 1500 s, screen time 1.0, watched. (b) Personal score of programme 2400480:
 0.7744 + 0.7879 + 0.9715 = 2.5338, times 1434#super[0.25] = 6.1537, gives 15.5925; the code prints 2.5340 and 15.5933 ---
 the gap is my rounding of 0.5#super[5.5/16] = 0.78799 down to 0.7879. (c) AP\@5: hits at positions 1 and 2,
-(1 + 1) / 5 = 0.4000, equal to the code. (d) Reading: I skimmed @exam @kaggle @hu2008 @jeh2003 @hamner; the assistant
-checked authors, venue and pages against Crossref (@hu2008, @jeh2003, first page only) and the JMLR page tags
-(@sklearn), and read in the PDF of @hu2008 the confidence $1 + alpha r$, the log variant and α = 40.
-*Checked automatically by the assistant's scripts* (I did not read them line by line): the second join, `verify.py`, the
-cross-environment sha256 match and `check_numbers.py`. *Errors of the assistant caught in the session.* It launched four
+(1 + 1) / 5 = 0.4000, equal to the code. (d) Reading: I skimmed @exam @kaggle @hu2008 @hamner and know @lecture from HW6; a fourth source I had approved (Jeh and Widom, WWW 2003) was
+dropped because its only free URL (Stanford InfoLab) stopped answering during the session. The assistant checked authors,
+venue and pages against Crossref (@hu2008) and the JMLR page tags (@sklearn), and read in the PDF of @hu2008 the confidence $1 + alpha r$, the log variant and α = 40.
+(e) I re-ran `eval/verify.py` myself from my prompt (stdlib only, raw CSVs): six toy cases pass, the validation target
+matches the pipeline for all 4,254 users, and the MAP\@5 of all eight lists, the final 0.38095 included, is reproduced.
+*Checked by the assistant's scripts only:* the second join, the cross-environment sha256 match and `check_numbers.py`. *Errors of the assistant caught in the session.* It launched four
 grids at once on my 8 GB laptop, so one ALS configuration took 262.9 s and the first full re-ranker run died with no output;
 its parallel Kaggle launch raced on the cache (failure case 2); its first `curl` without `-L` saved an HTML redirect as the
 ALS paper; and its progress note ("3 minutes" elapsed, against an estimate of 30--40) read like a promise, so I asked whether
-the kernel had hung; it had not (its four steps took 48, 217, 885 and 341 s).
-*What I trusted without verification.* TRUST-LINE-PENDING
+the kernel had hung; it had not (its four steps took 48, 217, 885 and 341 s). Its first push carried an e-mail address that
+GitHub attributes to another account; I noticed, and the commit was re-authored to my account and force-pushed.
+*What I trusted without verification.* The bootstrap intervals (1,000 resamples), the re-ranker ablation values, and the
+PPR, ALS and content scores fed to the re-ranker; I did not read the scripts or the kernel code line by line.
 
 #bibliography("refs.yml", title: [References], style: "ieee")

@@ -7,7 +7,7 @@ text = subprocess.run(["pdftotext", str(D / "report/report.pdf"), "-"], capture_
 text = text.split("\nReferences\n")[0]
 # Exclude this script's own output: it lists the unmatched numbers, so reading it back would
 # make every previously unmatched number "match" on the next run (bug caught in the session).
-logs = " ".join(p.read_text(errors="ignore") for p in list((D / "results").glob("*.txt")) + list((D / "results").glob("*.json"))
+logs = " ".join(p.read_text(errors="ignore") for p in [q for ext in ("txt", "json", "csv") for q in (D / "results").rglob(f"*.{ext}")]
                 if p.name != "check_numbers_output.txt")
 norm = lambda x: x.replace(",", "")
 lognums = set()

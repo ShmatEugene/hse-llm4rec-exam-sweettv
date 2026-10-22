@@ -33,3 +33,9 @@ citation_public_url=http://jmlr.org/papers/v12/pedregosa11a.html
 citation_abstract_html_url=http://jmlr.org/papers/v12/pedregosa11a.html
 citation_issn=1533-7928
 sklearn authors: Fabian Pedregosa;Gaël Varoquaux;Alexandre Gramfort;Vincent Michel;Bertrand Thirion;Olivier Grisel;Mathieu Blondel;Peter Prettenhofer;Ron Weiss;Vincent Dubourg;Jake Vanderplas;Alexandre Passos;David Cournapeau;Matthieu Brucher;Matthieu Perrot;Édouard Duchesnay;
+--- final reference URL check 2026-10-22 22:59
+200 https://www.kaggle.com/competitions/sweettv-tv-program-recommender
+200 https://github.com/benhamner/Metrics
+200 https://yifanhu.net/PUB/cf.pdf
+200 https://jmlr.org/papers/v12/pedregosa11a.html
+200 https://github.com/ShmatEugene/hse-llm4rec-exam-sweettv

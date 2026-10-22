@@ -1,0 +1,5 @@
+Hand check as typed by the student in the session (copied verbatim from the chat, 2026-10-22):
+(a) overlap 1500 s; screen time 1.0 (1500 / 1500); watched (>= 0.8): yes
+(b) decays 0.7744 + 0.7879 + 0.9715 = 2.5338; 1434^0.25 = 6.1537; score 15.5925
+(c) hits at positions 1 (2400480) and 2 (2400467): precision 1.0 and 1.0; AP@5 = (1.0 + 1.0) / 5 = 0.4000
+Comparison with the code (results/hand_answers.txt): (a) and (c) equal; (b) differs by rounding: 0.5^(5.5/16) = 0.78799, the student wrote 0.7879.

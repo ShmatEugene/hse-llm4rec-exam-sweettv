@@ -12,3 +12,4 @@
 [map] als: recomputed MAP@5 0.29758 (n=4254) vs dump 0.29758 -> OK
 [map] ppr: recomputed MAP@5 0.34310 (n=4254) vs dump 0.34310 -> OK
 [map] rerank: recomputed MAP@5 0.38012 (n=4254) vs dump 0.38012 -> OK
+[map] rerank_v2: recomputed MAP@5 0.38095 (n=4254) vs dump 0.38095 -> OK

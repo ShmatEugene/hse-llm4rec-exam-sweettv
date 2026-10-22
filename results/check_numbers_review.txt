@@ -1,0 +1,1 @@
+Manual review of the 6 unmatched numbers (2026-10-22): 4.2, 4.3, 4.4, 5.1 are section numbers; "0.55" is pdftotext merging 0.5^(5.5/16); "14340.25" is 1434^0.25 (both in results/hand_inputs.txt / hand_user.txt).

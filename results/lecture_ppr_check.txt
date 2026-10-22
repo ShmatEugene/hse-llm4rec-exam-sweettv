@@ -1,0 +1,12 @@
+8:Personalize recommendations using restart distributions.
+46:HW6. Personalized PageRank Movie Recommendations 
+7:Understand graphs, random walks, and PageRank.
+8:Personalize recommendations using restart distributions.
+9:Build a PPR recommender
+10:Compare PPR with MF and discuss their business value.
+46:HW6. Personalized PageRank Movie Recommendations 
+51:Implementation: Compute global PageRank and user-seeded PPR with TensorFlow.js. Define α\alphaα as the link-following probability.
+53:Evaluation: Select PPR’s α\alphaα using validation Recall@10. Compare popularity, global PageRank, PPR, and your previous MF on the same eligible test users and candidate movies.
+56:Controlled Comparison: Separately change one setting at a time—user A/B at α=0.85\alpha=0.85α=0.85, then user A at α=0.85\alpha=0.85α=0.85 versus 0.500.500.50. Use the validation-selected α\alphaα for the final PPR evaluation.
+57:Reporting: Report test Recall@10, evaluation exclusions, and recommendation popularity based on positive training ratings. PPR scores are not predicted ratings or purchase probabilities.
+59:Should the streaming platform keep MF, replace it with PPR, or use the two methods in different recommendation sections? Choose one strategy and justify it using your Recall@10 results and specific movie examples from the same two users’ Top-10 lists.
